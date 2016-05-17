@@ -1,0 +1,24 @@
+{
+  "name": "jssql",
+  "description": "A Simple javascript sql library ",
+  "version": "1.0.1",
+  "author": "Avery Durrant <avery246813579@gmail.com> (http://frostbytedev.com)",
+  "license": "MIT",
+  "dependencies": {
+    "mysql": "~2.10.2"
+  },
+  "devDependencies": {
+    "mysql": "~2.10.2"
+  },
+  "main": "./lib/index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test/test.js"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "keywords": [
+    "sql"
+  ]
+}
