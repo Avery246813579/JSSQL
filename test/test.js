@@ -1,7 +1,14 @@
-var jssql = require('../index.js');
-var Scheme = jssql.Scheme;
-var Table = jssql.Table;
+var jssql = require('../lib/index.js');
+
 var Database = jssql.Database;
+var testDatabase = new Database({
+    host: '127.0.0.1',
+    user: 'root',
+    password: '',
+    database: 'TEST_DATABASE'
+});
+
+var Scheme = jssql.Scheme;
 var Structure = jssql.Structure;
 
 var testScheme = new Scheme({
@@ -11,32 +18,31 @@ var testScheme = new Scheme({
         Index: Structure.Index.PRIMARY
     },
     NAME: {
-        type: Structure.Type.VARCHAR,
+        type: "VARCHAR",
         length: 100
     }
 });
 
-var testTable = new Table('name', testScheme);
+var Table = jssql.Table;
+var testTable = new Table('TABLE_NAME', testScheme);
 
-var database = new Database({
-    host: '127.0.0.1',
-    user: 'root',
-    password: '',
-    database: 'TEST'
+testDatabase.table(testTable);
+
+testTable.save({
+    NAME: "JOHN"
+}, function(err){
+    if(err)
+        throw err;
 });
 
-database.table(testTable);
+setTimeout(function(){
+    testTable.find({
+        NAME: "JOHN"
+    }, function(err, rows){
+        if(err){
+            throw err;
+        }
 
-function haulResponse(error, rows){
-    if (error) {
-        return 'Error\n' + error;
-    } else {
-        return '' + JSON.stringify(rows, function (key, value) {
-                if (Buffer.isBuffer(value)) {
-                    return value.toString();
-                } else {
-                    return value;
-                }
-            });
-    }
-}
+        console.dir(rows);
+    });
+}, 1000);
