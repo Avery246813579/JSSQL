@@ -36,9 +36,7 @@ testTable.save({
 });
 
 setTimeout(function(){
-    testTable.find({
-        NAME: "JOHN"
-    }, function(err, rows){
+    testTable.find({}, function(err, rows){
         if(err){
             throw err;
         }
