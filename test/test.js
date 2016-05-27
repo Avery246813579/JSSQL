@@ -14,7 +14,6 @@ var testScheme = new Scheme({
         type: Structure.Type.VARCHAR,
         length: 100
     }
-
 });
 
 var testTable = new Table('name', testScheme);
