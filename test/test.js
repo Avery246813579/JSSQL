@@ -1,32 +1,26 @@
 var jssql = require('../lib/index.js');
 
 var queryHelper = require('../lib/util/queryHelper.js');
-
-var test = [
-    {
-        DOG: "ONE",
-        CAT: "TWO"
-    },
-    [
-        {
-            BUNNY: "FUNNY",
-            DINGO: "RUNNY",
-            TIGER: "PUNNY"
-        },
-        {
-            WHALE: "FAIL"
-        }
-    ]
-];
-
-queryHelper.toKeyValue(test, function (err, keys, values) {
-    if (err) {
-        throw err;
-    }
-
-    console.log(keys);
-    console.dir(values);
-});
+//
+//var test = [
+//    {
+//        DOG: "ONE",
+//        CAT: "TWO"
+//    },
+//    {
+//        DOG: "TWO",
+//        CAT: "ONE"
+//    }
+//];
+//
+//queryHelper.toKeyValue(test, function (err, keys, values) {
+//    if (err) {
+//        throw err;
+//    }
+//
+//    console.log(keys);
+//    console.dir(values);
+//});
 
 
 var Database = jssql.Database;
@@ -65,22 +59,31 @@ testDatabase.table(testTable);
 //});
 //
 //setTimeout(function(){
-testTable.insert({NAME: "AVERY"}, function (err) {
-    if(err){
-        throw err;
-    }
-});
+//testTable.insert({NAME: "AVERY"}, function (err) {
+//    if (err) {
+//        throw err;
+//    }
+//});
 
-testTable.find({NAME: "AVERY"}, function (err, row) {
+//testTable.findOne([
+//    {
+//        DOG: "ONE",
+//        CAT: "TWO"
+//    },
+//    {
+//        DOG: "TWO",
+//        CAT: "ONE"
+//    }
+//], function (err, row) {
+//    if(err){
+//        throw err;
+//    }
+//
+//    console.dir(row);
+//});
+
+testTable.update({NAME: "NOT AVERY"}, {NAME: "AVERY"}, function (err) {
     if (err) {
-        throw err;
-    }
-
-    console.dir(row);
-});
-
-testTable.update({NAME: "AVERY"}, {NAME: "CHEF KEIF"}, function(err){
-    if(err){
         throw err;
     }
 });

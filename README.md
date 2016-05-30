@@ -74,11 +74,56 @@ testTable.find({
        throw err;
    }
 
-    Console.dir(rows);
+    console.dir(rows);
+});
+```
+
+If we just want to find one row, we can use the findOne function. Instead of having a callback that returns rows, the findOne callback returns one row.  
+```js
+testTable.findOne({
+    NAME: "BOB"
+}, function(err, row){
+   if(err){
+       throw err;
+   }
+
+    console.dir(row);
 });
 ```
 
 There is a small window that the save function takes to actually save the new row. Because of this time, having a save and find right after each other will not show the new row. Should not be a problem unless you have the code following each other. In that case, set a timeout before you call the find. 
 
-## Developers Note
-This is my first npm project, and I am having a grand time working on this. I am adding features as I need them regarding my personal projects. If you want a feature added, submit a ticket [Here](https://github.com/FrostbyteDevelopment/JSSQL/issues). If you want to help with my project, feel free to create a pull request. I am also dislexic, so if anyone wants to help me with this README, feel free.
+### Updating rows
+If you want to update a row, use the update function. The example below updates all the rows where NAME is equal to 'BOB' and sets NAME equal to 'NOT BOB'
+```js.
+testTable.update({NAME: "NOT BOB"}, {NAME: "BOB"}, function (err) {
+    if (err) {
+        throw err;
+    }
+});
+```
+
+### AND vs OR 
+In SQL we can use AND and OR to find and update statements. We use a array to handle ORs, and dictionaries to handle ANDs. My explaination might sounds weird, so let's just show you how it works. 
+
+The code below will find one row that has the dog variable set to 'ONE' OR it will find one row where dog is set to 'TWO'.
+```js
+testTable.findOne([
+    {
+        DOG: "ONE",
+    },
+    {
+        DOG: "TWO",
+    }
+], function (err, row) {
+    console.dir(row);
+});
+```
+
+### TODO
+- Add Delete Function
+- Foreign Keys
+- Custom Error Logging 
+
+### Developers Note
+This is my first npm project, and I am having a grand time working on this. I am adding features as I need them regarding my personal projects. If you want a feature added, submit a ticket [Here](https://github.com/FrostbyteDevelopment/JSSQL/issues). If you want to help with my project, feel free to create a pull request.
