@@ -1,5 +1,34 @@
 var jssql = require('../lib/index.js');
 
+var queryHelper = require('../lib/util/queryHelper.js');
+
+var test = [
+    {
+        DOG: "ONE",
+        CAT: "TWO"
+    },
+    [
+        {
+            BUNNY: "FUNNY",
+            DINGO: "RUNNY",
+            TIGER: "PUNNY"
+        },
+        {
+            WHALE: "FAIL"
+        }
+    ]
+];
+
+queryHelper.toKeyValue(test, function (err, keys, values) {
+    if (err) {
+        throw err;
+    }
+
+    console.log(keys);
+    console.dir(values);
+});
+
+
 var Database = jssql.Database;
 var testDatabase = new Database({
     host: '127.0.0.1',
@@ -27,20 +56,32 @@ var Table = jssql.Table;
 var testTable = new Table('TABLE_NAME', testScheme);
 
 testDatabase.table(testTable);
-
-testTable.save({
-    NAME: "JOHN"
-}, function(err){
-    if(err)
+//
+//testTable.save({
+//    NAME: "JOHN"
+//}, function(err){
+//    if(err)
+//        throw err;
+//});
+//
+//setTimeout(function(){
+testTable.insert({NAME: "AVERY"}, function (err) {
+    if(err){
         throw err;
+    }
 });
 
-setTimeout(function(){
-    testTable.find({}, function(err, rows){
-        if(err){
-            throw err;
-        }
+testTable.find({NAME: "AVERY"}, function (err, row) {
+    if (err) {
+        throw err;
+    }
 
-        console.dir(rows);
-    });
-}, 1000);
+    console.dir(row);
+});
+
+testTable.update({NAME: "AVERY"}, {NAME: "CHEF KEIF"}, function(err){
+    if(err){
+        throw err;
+    }
+});
+//}, 1000);
