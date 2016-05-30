@@ -4,7 +4,7 @@ $ npm install jssql
 ```
 ## Introduction
 
-This is a node.js driver that makes sql easy! It doesnt matter if you're a SQl noob or export, everyone can enjoy JSSQL.
+This is a node.js driver that makes SQL easy! It doesnt matter if you're a SQL noob or expert, everyone can enjoy JSSQL.
 
 ### Setting up our database
 The first thing we need to do is setup a database. The code below initializes a database instance and if the database does not exist, then it will create one. 
@@ -55,7 +55,7 @@ testDatabase.table(testTable);
 ```
 
 ### Placing and recieving information 
-Once we have our table sorted out, we can place some information in it. Below is a quick example of how to add a row
+Once we have our table sorted out, we can place some information in it. Below is a quick example of how to add a row.
 ```js
 testTable.save({
     NAME: "BOB"
@@ -91,7 +91,7 @@ testTable.findOne({
 });
 ```
 
-There is a small window that the save function takes to actually save the new row. Because of this time, having a save and find right after each other will not show the new row. Should not be a problem unless you have the code following each other. In that case, set a timeout before you call the find. 
+There is a small window of time that the save function takes to actually save the new row. Because of this time, having a save and find right after each other will not show the new row. This should not be a problem unless you perform the find directly after the save. If doing this is completely necessary, set a timeout before you call the find. 
 
 ### Updating rows
 If you want to update a row, use the update function. The example below updates all the rows where NAME is equal to 'BOB' and sets NAME equal to 'NOT BOB'
@@ -104,7 +104,7 @@ testTable.update({NAME: "NOT BOB"}, {NAME: "BOB"}, function (err) {
 ```
 
 ### AND vs OR 
-In SQL we can use AND and OR to find and update statements. We use a array to handle ORs, and dictionaries to handle ANDs. My explaination might sounds weird, so let's just show you how it works. 
+In SQL we can use AND and OR to find and update statements. We use a array to handle ORs, and dictionaries to handle ANDs. My explaination might sound weird, so let me just show you how it works:
 
 The code below will find one row that has the dog variable set to 'ONE' OR it will find one row where dog is set to 'TWO'.
 ```js
