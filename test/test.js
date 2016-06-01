@@ -49,7 +49,25 @@ var testScheme = new Scheme({
 var Table = jssql.Table;
 var testTable = new Table('TABLE_NAME', testScheme);
 
+var foreignScheme = new Scheme({
+    ID: {
+        type: Structure.Type.INT,
+        AI: true,
+        Index: Structure.Index.PRIMARY
+    },
+    FOREIGN_KEY: {
+        type: "INT",
+        foreign: {
+            key: "ID",
+            table: "TABLE_NAME"
+        }
+    }
+});
+
+var foreignTable = new Table('FOREIGN_TABLE', foreignScheme);
+
 testDatabase.table(testTable);
+testDatabase.table(foreignTable);
 //
 //testTable.save({
 //    NAME: "JOHN"
@@ -82,9 +100,9 @@ testDatabase.table(testTable);
 //    console.dir(row);
 //});
 
-testTable.update({NAME: "NOT AVERY"}, {NAME: "AVERY"}, function (err) {
-    if (err) {
-        throw err;
-    }
-});
+//testTable.update({NAME: "NOT AVERY"}, {NAME: "AVERY"}, function (err) {
+//    if (err) {
+//        throw err;
+//    }
+//});
 //}, 1000);
