@@ -68,41 +68,9 @@ var foreignTable = new Table('FOREIGN_TABLE', foreignScheme);
 
 testDatabase.table(testTable);
 testDatabase.table(foreignTable);
-//
-//testTable.save({
-//    NAME: "JOHN"
-//}, function(err){
-//    if(err)
-//        throw err;
-//});
-//
-//setTimeout(function(){
-//testTable.insert({NAME: "AVERY"}, function (err) {
-//    if (err) {
-//        throw err;
-//    }
-//});
 
-//testTable.findOne([
-//    {
-//        DOG: "ONE",
-//        CAT: "TWO"
-//    },
-//    {
-//        DOG: "TWO",
-//        CAT: "ONE"
-//    }
-//], function (err, row) {
-//    if(err){
-//        throw err;
-//    }
-//
-//    console.dir(row);
-//});
-
-//testTable.update({NAME: "NOT AVERY"}, {NAME: "AVERY"}, function (err) {
-//    if (err) {
-//        throw err;
-//    }
-//});
-//}, 1000);
+testTable.delete({}, function(err){
+    if(err){
+        throw err;
+    }
+});
