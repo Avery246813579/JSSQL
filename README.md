@@ -47,7 +47,7 @@ The most important part about creating a scheme is the syntax we use. Inside the
 - ai: If the column is auto incrementing 
 - null: If the column can be null
 
-Once the Scheme is setup, we then have to create our table. A table definition only needs to contain the table name and the scheme. The most important part about creating a table is remembering to pair it with a database. Without a database pair the table will fail to work. 
+Once the Scheme is setup, we then have to create our table. A table definition only needs to contain the table name and the scheme. The most important part about creating a table is remembering to pair it with a database. Without a database pair, the table will fail to work. 
 ```js
 var testTable = new Table('TABLE_NAME', testScheme);
 
@@ -104,7 +104,7 @@ testTable.update({NAME: "NOT BOB"}, {NAME: "BOB"}, function (err) {
 ```
 
 ### AND vs OR 
-In SQL we can use AND and OR to find and update statements. We use a array to handle ORs, and dictionaries to handle ANDs. My explaination might sound weird, so let me just show you how it works:
+In SQL we can use AND and OR to find and update statements. We use an array to handle ORs, and dictionaries to handle ANDs. My explaination might sound weird, so let me just show you how it works:
 
 The code below will find one row that has the dog variable set to 'ONE' OR it will find one row where dog is set to 'TWO'.
 ```js
