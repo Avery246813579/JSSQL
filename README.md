@@ -95,7 +95,7 @@ There is a small window of time that the save function takes to actually save th
 
 ### Updating rows
 If you want to update a row, use the update function. The example below updates all the rows where NAME is equal to 'BOB' and sets NAME equal to 'NOT BOB'
-```js.
+```js
 testTable.update({NAME: "NOT BOB"}, {NAME: "BOB"}, function (err) {
     if (err) {
         throw err;
@@ -121,9 +121,11 @@ testTable.findOne([
 ```
 
 ### TODO
-- Add Delete Function
-- Foreign Keys
 - Custom Error Logging 
+- Dropping Databases and Tables
+- Commenting Codebase
+- Adding more advanced tests and examples
+- Debug mode
 
 ### Developers Note
 This is my first npm project, and I am having a grand time working on this. I am adding features as I need them regarding my personal projects. If you want a feature added, submit a ticket [Here](https://github.com/FrostbyteDevelopment/JSSQL/issues). If you want to help with my project, feel free to create a pull request.
