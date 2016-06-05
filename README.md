@@ -46,35 +46,12 @@ The most important part about creating a scheme is the syntax we use. Inside the
 - index: The index type of the column
 - ai: If the column is auto incrementing 
 - null: If the column can be null
-- foreign: Connects an ID to another table
 
-Once the Scheme is setup, we then have to create our table. A table definition only needs to contain the table name and the scheme. The most important part about creating a table is remembering to pair it with a database. Without a database pair the table will fail to work. 
+Once the Scheme is setup, we then have to create our table. A table definition only needs to contain the table name and the scheme. The most important part about creating a table is remembering to pair it with a database. Without a database pair, the table will fail to work. 
 ```js
 var testTable = new Table('TABLE_NAME', testScheme);
 
 testDatabase.table(testTable);
-```
-
-### Foreign Keys
-Foreign keys are very helpful and important in many databases. All we need to do is set the foreign key and foreign table we want to link with. Below shows how to create a table with a foreign id that connections to our main table created above. 
-
-```js
-var foreignScheme = new Scheme({
-    ID: {
-        type: Structure.Type.INT,
-        AI: true,
-        Index: Structure.Index.PRIMARY
-    },
-    FOREIGN_KEY: {
-        type: "INT",
-        foreign: {
-            key: "ID",
-            table: "TABLE_NAME"
-        }
-    }
-});
-
-var foreignTable = new Table('FOREIGN_TABLE', foreignScheme);
 ```
 
 ### Placing and recieving information 
@@ -118,7 +95,7 @@ There is a small window of time that the save function takes to actually save th
 
 ### Updating rows
 If you want to update a row, use the update function. The example below updates all the rows where NAME is equal to 'BOB' and sets NAME equal to 'NOT BOB'
-```js
+```js.
 testTable.update({NAME: "NOT BOB"}, {NAME: "BOB"}, function (err) {
     if (err) {
         throw err;
@@ -126,20 +103,8 @@ testTable.update({NAME: "NOT BOB"}, {NAME: "BOB"}, function (err) {
 });
 ```
 
-### Deleting rows 
-Deleting rows is an important part of SQL, and quite easy to do with JSSQL. The delete function has the same syntax as the add or insert function, it just deletes rows instead of inserting them. Below is an example of deleting all the rows with that has 'BOB' as the NAME.
-```js
-testTable.delete({
-    NAME: 'BOB'
-}, function(err){
-    if(err){
-        throw err;
-    }
-});
-```
-
 ### AND vs OR 
-In SQL we can use AND and OR to find, update and delete statements. We use a array to handle ORs, and dictionaries to handle ANDs. My explaination might sound weird, so let me just show you how it works:
+In SQL we can use AND and OR to find and update statements. We use an array to handle ORs, and dictionaries to handle ANDs. My explaination might sound weird, so let me just show you how it works:
 
 The code below will find one row that has the dog variable set to 'ONE' OR it will find one row where dog is set to 'TWO'.
 ```js
@@ -156,10 +121,9 @@ testTable.findOne([
 ```
 
 ### TODO
+- Add Delete Function
+- Foreign Keys
 - Custom Error Logging 
-- Dropping Databases and Tables
-- Commenting Codebase
-- Adding more advanced tests and examples
 
 ### Developers Note
 This is my first npm project, and I am having a grand time working on this. I am adding features as I need them regarding my personal projects. If you want a feature added, submit a ticket [Here](https://github.com/FrostbyteDevelopment/JSSQL/issues). If you want to help with my project, feel free to create a pull request.

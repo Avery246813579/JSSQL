@@ -69,7 +69,9 @@ var foreignTable = new Table('FOREIGN_TABLE', foreignScheme);
 testDatabase.table(testTable);
 testDatabase.table(foreignTable);
 
-testTable.delete({}, function(err){
+testTable.delete({
+    NAME: 'BOB'
+}, function(err){
     if(err){
         throw err;
     }
