@@ -1,26 +1,7 @@
 var jssql = require('../lib/index.js');
 
 var queryHelper = require('../lib/util/queryHelper.js');
-//
-//var test = [
-//    {
-//        DOG: "ONE",
-//        CAT: "TWO"
-//    },
-//    {
-//        DOG: "TWO",
-//        CAT: "ONE"
-//    }
-//];
-//
-//queryHelper.toKeyValue(test, function (err, keys, values) {
-//    if (err) {
-//        throw err;
-//    }
-//
-//    console.log(keys);
-//    console.dir(values);
-//});
+
 
 
 var Database = jssql.Database;
@@ -69,10 +50,10 @@ var foreignTable = new Table('FOREIGN_TABLE', foreignScheme);
 testDatabase.table(testTable);
 testDatabase.table(foreignTable);
 
-testTable.delete({
-    NAME: 'BOB'
-}, function(err){
-    if(err){
-        throw err;
-    }
-});
+ testTable.update({NAME: "PEWDIEPIE"}, {ID: 14}, function(err, row){
+     if(err){
+         throw err;
+     }
+
+    console.dir(row[0]['ID']);
+ });
