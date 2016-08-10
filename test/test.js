@@ -29,6 +29,7 @@ var testScheme = new Scheme({
 
 var Table = jssql.Table;
 var testTable = new Table('TABLE_NAME', testScheme);
+var testTable2 = new Table('TABLE_NAME2', testScheme);
 
 var foreignScheme = new Scheme({
     ID: {
@@ -47,13 +48,10 @@ var foreignScheme = new Scheme({
 
 var foreignTable = new Table('FOREIGN_TABLE', foreignScheme);
 
-testDatabase.table(testTable);
-testDatabase.table(foreignTable);
+testDatabase.table([testTable, foreignTable, testTable2]);
 
- testTable.update({NAME: "PEWDIEPIE"}, {ID: 14}, function(err, row){
+ testTable.update({NAME: "PEWDIEPIE"}, {ID: 1}, function(err, row){
      if(err){
          throw err;
      }
-
-    console.dir(row[0]['ID']);
  });
