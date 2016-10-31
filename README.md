@@ -129,6 +129,7 @@ testTable.findOne([
 - Alterting Tables
 - Case Sensative Foreign Keys
 - Adding Foreign keys to read me
+- Add defaults for Tables
 
 ### Developers Note
 This is my first npm project, and I am having a grand time working on this. I am adding features as I need them regarding my personal projects. If you want a feature added, submit a ticket [Here](https://github.com/FrostbyteDevelopment/JSSQL/issues). If you want to help with my project, feel free to create a pull request.
