@@ -104,7 +104,7 @@ testTable.update({NAME: "NOT BOB"}, {NAME: "BOB"}, function (err) {
 ```
 
 ### AND vs OR 
-In SQL we can use AND and OR to find and update statements. We use an array to handle ORs, and dictionaries to handle ANDs. My explaination might sound weird, so let me just show you how it works:
+In SQL we can use AND and OR to find and update statements. We use an array to handle ORs, and dictionaries to handle ANDs. My explanation might sound weird, so let me just show you how it works:
 
 The code below will find one row that has the dog variable set to 'ONE' OR it will find one row where dog is set to 'TWO'.
 ```js
@@ -120,16 +120,8 @@ testTable.findOne([
 });
 ```
 
-### TODO
-- Custom Error Logging 
-- Dropping Databases and Tables
-- Commenting Codebase
-- Adding more advanced tests and examples
-- Debug mode
-- Alterting Tables
-- Case Sensative Foreign Keys
-- Adding Foreign keys to read me
-- Add defaults for Tables
+## Roadmap
+Link to the project roadmap: https://trello.com/b/TCJgPuTZ/jssql-roadmap
 
 ### Developers Note
 This is my first npm project, and I am having a grand time working on this. I am adding features as I need them regarding my personal projects. If you want a feature added, submit a ticket [Here](https://github.com/FrostbyteDevelopment/JSSQL/issues). If you want to help with my project, feel free to create a pull request.
