@@ -13,7 +13,7 @@ var testScheme = new JSSQL.Scheme({
     ID: {
         type: "INT",
         AI: true,
-        Index: "PRIMARY"
+        Index: "PRIMARY KEY"
     },
     NAME: {
         type: "VARCHAR",
