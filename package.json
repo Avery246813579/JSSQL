@@ -1,16 +1,16 @@
 {
   "name": "jssql",
-  "description": "A Simple javascript sql library",
-  "version": "1.2.4",
-  "author": "Avery Durrant <avery246813579@gmail.com> (http://frostbytedev.com)",
+  "description": "A simple javascript MySQL library",
+  "version": "1.2.5",
+  "author": "Avery Durrant <avery@frostbyte.co>",
   "license": "MIT",
   "dependencies": {
-    "mysql": "~2.10.2"
+    "mysql": "~2.16.0"
   },
   "devDependencies": {
     "mocha": "^4.1.0"
   },
-  "main": "./lib/index.js",
+  "main": "./src/index.js",
   "scripts": {
     "start": "node server.js",
     "test": "node test/test.js"
@@ -19,14 +19,15 @@
     "test": "test"
   },
   "keywords": [
-    "sql", "mysql"
+    "sql",
+    "mysql"
   ],
   "bugs": {
-    "url": "https://github.com/FrostbyteDevelopment/JSSQL/issues",
-    "email": "jssql@frostbytedev.com"
+    "url": "https://github.com/avery246813579/JSSQL/issues",
+    "email": "avery@frostbyte.co"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/FrostbyteDevelopment/JSSQL.git"
+    "url": "https://github.com/avery246813579/JSSQL.git"
   }
 }
