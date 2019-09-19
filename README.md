@@ -21,6 +21,9 @@ var testDatabase = new Database({
 });
 ```
 
+We can also add in the `connectionLimit` message to add the number of 
+pool connections we want. Default is 10.
+
 ### Creating our first scheme and table
 Now that we have a database initilized we can go right into creating out first scheme and table. Let's start by creating our scheme. 
 ```js
