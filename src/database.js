@@ -98,14 +98,4 @@ Database.prototype.toString = function () {
 
 };
 
-/**
- * var connection = mysql.createConnection({
-        host     : 'pctdb.cc10qvoaikvx.us-east-1.rds.amazonaws.com',
-        user     : 'root',
-        password : 'frostbytedev246813579',
-        port     : process.env.RDS_PORT,
-        database : 'PCT'
-    });
- */
-
 module.exports = Database;
