@@ -33,7 +33,7 @@ Table.prototype.init = function () {
  * we return null.
  *
  * @param properties {Object}       The query we want to run
- * @param callback {Function}       Callback with the parameters of (err, row)
+ * @param [callback] {Function}       Callback with the parameters of (err, row)
  * @returns {Promise}
  */
 Table.prototype.findOne = function (properties, callback) {
