@@ -26,25 +26,23 @@ function Database(properties) {
         this.properties['port'] = 3306;
     }
 
-    this.properties['host'] = properties['host'];
-    this.properties['user'] = properties['user'];
-    this.properties['password'] = properties['password'];
-    this.properties['database'] = properties['database'];
-
+    this.properties = properties;
     this.loadPool();
 }
 
 Database.prototype.loadPool = function (tried) {
-    this.properties['connectionLimit'] = 10;
+    let {connectionLimit} = this.properties;
 
-    var instance = this;
+    this.properties['connectionLimit'] = 10;
+    if (connectionLimit) {
+        this.properties.connectionLimit = connectionLimit;
+    }
+
     this.pool = mysql.createPool(this.properties, function (err) {
         if (err) {
             throw err;
         }
     });
-
-    this.properties['connectionLimit'] = null;
 };
 
 /**
@@ -99,15 +97,5 @@ Database.prototype.toString = function () {
     var toReturn = "Database: ";
 
 };
-
-/**
- * var connection = mysql.createConnection({
-        host     : 'pctdb.cc10qvoaikvx.us-east-1.rds.amazonaws.com',
-        user     : 'root',
-        password : 'frostbytedev246813579',
-        port     : process.env.RDS_PORT,
-        database : 'PCT'
-    });
- */
 
 module.exports = Database;
