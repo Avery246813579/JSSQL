@@ -5,7 +5,7 @@ var testDatabase = new Database({
     host: '127.0.0.1',
     user: 'root',
     password: '',
-    database: 'TEST_DATABASE'
+    database: 'drip'
 });
 
 var Scheme = jssql.Scheme;
@@ -13,20 +13,20 @@ var Structure = jssql.Structure;
 
 var testScheme = new Scheme({
     ID: {
-        type: Structure.Type.INT,
+        TYPE: "INT",
         AI: true,
-        Index: Structure.Index.PRIMARY
+        INDEX: "PRIMARY KEY",
+        NULL: false
     },
-    NAME: {
-        type: "DECIMAL",
-        length: 10,
-        decimal: 5,
-        default: 1.2
+    PAYMENT_TYPE: {
+        TYPE: "TINYINT",
+        NULL: false,
+        DEFAULT: 0
     }
 });
 
 var Table = jssql.Table;
-var testTable = new Table('Tes2', testScheme);
+var testTable = new Table('Orders', testScheme);
 
 testDatabase.table([testTable]);
 
@@ -42,20 +42,16 @@ testDatabase.table([testTable]);
 //     throw err;
 // });
 
-testTable.findOne({ID: 2}).then((row) => {
-    console.dir(row);
-}).catch((err) => {
-    console.dir(err);
+testTable.findAdvanced({}, {
+    LIKE: {
+        KEY: "NAME",
+        VALUE: "Reg%"
+    },
+    AFTER: {
+        KEY: "ID", VALUE: 200
+    },
+    LIMIT: 5,
+    DEBUG: true
+}).then((lRows) => {
+    console.dir(lRows);
 });
-
-// testTable.update({NAME: 69.9}, {ID: 1}).then((newRow) => {
-//     console.dir(newRow);
-// }).catch((err) => {
-//     throw err;
-// });
-
-// testTable.delete({ID: 1}).then(() => {
-//     console.log("Deleted");
-// }).catch((err) => {
-//      throw err;
-// });

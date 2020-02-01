@@ -157,6 +157,96 @@ Table.prototype.find = function (properties, callback) {
 };
 
 /**
+ * Finds using advanced stuff
+ *
+ * @param properties                Properties we want to check
+ * @param advanced                  Object with LIMIT, AFTER, BEFORE, LIKE
+ *
+ * @returns {Promise<List>}
+ */
+Table.prototype.findAdvanced = function (properties, advanced={}) {
+    return new Promise((resolve, reject) => {
+        if (this.database == null) {
+            return reject(new Error("Table '" + this.name + "' was never assigned a Database!"));
+        }
+
+        if (QueryHelper.checkData(this.scheme.getKeys(), properties)) {
+            return reject(new Error("Certain keys are not found in Table '" + this.name + "' Scheme"));
+        }
+
+        let name = this.name;
+        let pool = this.database.pool;
+        QueryHelper.toKeyValue(properties, function (err, key, values) {
+            if (err) {
+                return reject(new Error("Internal error trying to parse key value pair"));
+            }
+
+            let query = "SELECT * FROM " + name + " WHERE 1";
+            if (Object.keys(properties).length > 0) {
+                query = "SELECT * FROM " + name + " WHERE " + key;
+            }
+
+            let beforeDict = advanced.BEFORE;
+            if (beforeDict) {
+                query += ` AND ${beforeDict.KEY} < ?`;
+                values.push(beforeDict.VALUE);
+            }
+
+            let afterDict = advanced.AFTER;
+            if (afterDict) {
+                query += ` AND ${afterDict.KEY} > ?`;
+                values.push(afterDict.VALUE);
+            }
+
+            let like = advanced.LIKE;
+            if (advanced.LIKE) {
+                let likes = like;
+                if (Object.prototype.toString.call(like) !== '[object Array]') {
+                    likes = [like];
+                }
+
+                for (let pair of likes) {
+                    query += ` AND ${pair.KEY} LIKE ?`;
+                    values.push(pair.VALUE);
+                }
+            }
+
+            if (advanced.DESC) {
+                query += ` ORDER BY ${advanced.DESC} DESC`
+            }
+
+            if (advanced.ASC) {
+                query += ` ORDER BY ${advanced.ASC} DESC`
+            }
+
+            if (advanced.LIMIT) {
+                query += " LIMIT "+ advanced.LIMIT;
+            }
+
+            pool.getConnection(function (err, conn) {
+                if (err) {
+                    return reject({...err, TABLE: name, QUERY: query});
+                }
+
+                if (advanced.DEBUG) {
+                    console.log(query, values);
+                }
+
+                conn.query(query, values, function (err, rows) {
+                    conn.release();
+
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(rows);
+                    }
+                });
+            })
+        });
+    });
+};
+
+/**
  * Finds a list of rows like the properties given
  *
  * @param properties            Properties
