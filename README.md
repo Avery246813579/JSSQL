@@ -123,6 +123,81 @@ testTable.findOne([
 });
 ```
 
+## "Advanced Find" 
+If we want to do more advanced select statements, we are going to use the `findAdvanced` function. We use the first
+argument to find using basic equal conditions (like above), the second argument is to do a list of "advanced" topics.
+
+We can only use promises with advanced find. 
+
+## Column Selection
+If you would like to select what columns will be returned back, you can use `COLUMNS` in the advanced parameters.
+
+```javascript
+testTable.findAdvanced({}, {
+    COLUMNS: ["Patrons.*", "Accounts.FULL_NAME", "Accounts.ID"],
+}).then((lRows) => {
+    // Do stuff
+});
+```
+
+### Joins
+If you want to utilize the power join syntax in sql, we can use one of the following: LEFT_JOIN, RIGHT_JOIN, INNER_JOIN, 
+FULL_JOIN
+
+```javascript
+testTable.findAdvanced({}, {
+    LEFT_JOIN: {TABLE: "Accounts", LEFT: "Patrons.ACCOUNT_ID", RIGHT: "Accounts.ID"},
+}).then((lRows) => {
+   // Do stuff             
+});
+```
+
+Currently you can only use one join at a time, but if it's requested we can add stacking. 
+
+### Before/After
+If you want to get rows before or after an index, use the `BEFORE` and/or `AFTER` advanced parameter.
+
+```javascript
+testTable.findAdvanced({}, {
+    BEFORE: 5
+}).then((lRows) => {
+   // do stuff    
+});
+```
+
+### Limits
+We can limit the amount of rows we get by just adding the `LIMIT` key to our query.
+
+```javascript
+testTable.findAdvanced({ACCOUNT_ID: 3}, {
+    LIMIT: 5,
+}).then((lRows) => {
+    // DO STUFF
+});
+```
+
+## Asc/Desc
+You can order the rows using the `ASC` and `DESC` advanced parameter.
+
+```javascript
+testTable.findAdvanced({}, {
+    ASC: "ACCOUNT_ID"
+}).then((lRows) => {
+    // do stuff
+});
+```
+
+### Debug
+If you want to debug and see the full query, use the `DEBUG` advanced parameter.
+
+```javascript
+testTable.findAdvanced({}, {
+    DEBUG: true
+}).then((lRows) => {
+    // do stuff
+});
+```
+
 ### TODO
 Checkout [JSSQL's Trello](https://trello.com/b/DoyfBZUt/jssql) to find what features are coming soon!
 

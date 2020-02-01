@@ -188,10 +188,15 @@ Table.prototype.findAdvanced = function (properties, advanced={}) {
 
             let join = "";
             let leftDict = advanced.LEFT_JOIN, rightDict = advanced.RIGHT_JOIN;
+            let innerDict = advanced.INNER_JOIN, fullDict = advanced.FULL_JOIN;
             if (leftDict) {
                 join = ` LEFT JOIN ${leftDict.TABLE} ON ${leftDict.LEFT} = ${leftDict.RIGHT}`
             } else if (rightDict) {
                 join = ` RIGHT JOIN ${leftDict.TABLE} ON ${leftDict.LEFT} = ${leftDict.RIGHT}`
+            } else if (innerDict) {
+                join = ` INNER JOIN ${innerDict.TABLE} ON ${innerDict.LEFT} = ${innerDict.RIGHT}`
+            } else if (fullDict) {
+                join = ` FULL JOIN ${fullDict.TABLE} ON ${fullDict.LEFT} = ${fullDict.RIGHT}`
             }
 
             let query = `SELECT ${columns} FROM ${name + join} WHERE `;

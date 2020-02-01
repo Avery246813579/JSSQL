@@ -47,7 +47,7 @@ testDatabase.table([patrons, accounts]);
 //     throw err;
 // });
 
-patrons.findAdvanced({}, {
+testTable.findAdvanced({}, {
     COLUMNS: ["Patrons.*", "Accounts.FULL_NAME"],
     LEFT_JOIN: {TABLE: "Accounts", LEFT: "Patrons.ACCOUNT_ID", RIGHT: "Accounts.ID"},
     LIMIT: 5,
