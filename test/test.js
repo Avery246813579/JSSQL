@@ -18,17 +18,22 @@ var testScheme = new Scheme({
         INDEX: "PRIMARY KEY",
         NULL: false
     },
-    PAYMENT_TYPE: {
-        TYPE: "TINYINT",
-        NULL: false,
-        DEFAULT: 0
-    }
+});
+
+var accountScheme = new Scheme({
+    ID: {
+        TYPE: "INT",
+        AI: true,
+        INDEX: "PRIMARY KEY",
+        NULL: false
+    },
 });
 
 var Table = jssql.Table;
-var testTable = new Table('Orders', testScheme);
+var patrons = new Table('Patrons', testScheme);
+var accounts = new Table("Accounts", accountScheme);
 
-testDatabase.table([testTable]);
+testDatabase.table([patrons, accounts]);
 
 // testTable.find({}).then((rows) => {
 //     console.dir(rows);
@@ -42,14 +47,9 @@ testDatabase.table([testTable]);
 //     throw err;
 // });
 
-testTable.findAdvanced({}, {
-    LIKE: {
-        KEY: "NAME",
-        VALUE: "Reg%"
-    },
-    AFTER: {
-        KEY: "ID", VALUE: 200
-    },
+patrons.findAdvanced({}, {
+    COLUMNS: ["Patrons.*", "Accounts.FULL_NAME"],
+    LEFT_JOIN: {TABLE: "Accounts", LEFT: "Patrons.ACCOUNT_ID", RIGHT: "Accounts.ID"},
     LIMIT: 5,
     DEBUG: true
 }).then((lRows) => {

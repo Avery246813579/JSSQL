@@ -160,7 +160,7 @@ Table.prototype.find = function (properties, callback) {
  * Finds using advanced stuff
  *
  * @param properties                Properties we want to check
- * @param advanced                  Object with LIMIT, AFTER, BEFORE, LIKE
+ * @param advanced                  Object with LIMIT, AFTER, BEFORE, LIKE, COLUMNS, LEFT_JOIN, RIGHT_JOIN
  *
  * @returns {Promise<List>}
  */
@@ -181,9 +181,24 @@ Table.prototype.findAdvanced = function (properties, advanced={}) {
                 return reject(new Error("Internal error trying to parse key value pair"));
             }
 
-            let query = "SELECT * FROM " + name + " WHERE 1";
+            let columns = "*";
+            if (advanced.COLUMNS) {
+                columns = advanced.COLUMNS.join(", ");
+            }
+
+            let join = "";
+            let leftDict = advanced.LEFT_JOIN, rightDict = advanced.RIGHT_JOIN;
+            if (leftDict) {
+                join = ` LEFT JOIN ${leftDict.TABLE} ON ${leftDict.LEFT} = ${leftDict.RIGHT}`
+            } else if (rightDict) {
+                join = ` RIGHT JOIN ${leftDict.TABLE} ON ${leftDict.LEFT} = ${leftDict.RIGHT}`
+            }
+
+            let query = `SELECT ${columns} FROM ${name + join} WHERE `;
             if (Object.keys(properties).length > 0) {
-                query = "SELECT * FROM " + name + " WHERE " + key;
+                query += key;
+            } else {
+                query += "1"
             }
 
             let beforeDict = advanced.BEFORE;
