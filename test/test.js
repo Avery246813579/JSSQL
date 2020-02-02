@@ -47,10 +47,8 @@ testDatabase.table([patrons, accounts]);
 //     throw err;
 // });
 
-testTable.findAdvanced({}, {
-    COLUMNS: ["Patrons.*", "Accounts.FULL_NAME"],
-    LEFT_JOIN: {TABLE: "Accounts", LEFT: "Patrons.ACCOUNT_ID", RIGHT: "Accounts.ID"},
-    LIMIT: 5,
+patrons.findAdvanced({}, {
+    LIKE: [{KEY: "ID", VALUE: "a%"}, {KEY: "ID", VALUE: "b%", CONJUNCTION: "AND"}],
     DEBUG: true
 }).then((lRows) => {
     console.dir(lRows);

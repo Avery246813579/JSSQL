@@ -140,6 +140,19 @@ testTable.findAdvanced({}, {
 });
 ```
 
+### Like
+You can use the like comparison using the following. The LIKE block will default to be using or's but you can change it
+to use ANDs using the CONJUNCTION key.
+
+```javascript
+testTable.findAdvanced({}, {
+    LIKE: [{KEY: "USERNAME", VALUE: "av%", CONJUNCTION: "AND"}],
+}).then((lRows) => {
+    // Do stuff
+});
+```
+
+
 ### Joins
 If you want to utilize the power join syntax in sql, we can use one of the following: LEFT_JOIN, RIGHT_JOIN, INNER_JOIN, 
 FULL_JOIN
@@ -159,7 +172,7 @@ If you want to get rows before or after an index, use the `BEFORE` and/or `AFTER
 
 ```javascript
 testTable.findAdvanced({}, {
-    BEFORE: 5
+    BEFORE: {KEY: "ID", VALUE: 5}
 }).then((lRows) => {
    // do stuff    
 });

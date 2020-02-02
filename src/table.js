@@ -225,10 +225,17 @@ Table.prototype.findAdvanced = function (properties, advanced={}) {
                     likes = [like];
                 }
 
+                let likeClause = "";
                 for (let pair of likes) {
-                    query += ` AND ${pair.KEY} LIKE ?`;
+                    if (likeClause.length > 0) {
+                        likeClause += (pair.CONJUNCTION ? pair.CONJUNCTION + " " : "OR ")
+                    }
+
+                    likeClause += `${pair.KEY} LIKE ? `;
                     values.push(pair.VALUE);
                 }
+
+                query += ` AND (${likeClause})`
             }
 
             if (advanced.DESC) {
