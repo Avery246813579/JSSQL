@@ -126,6 +126,23 @@ testTable.findOne([
 ## "Advanced Find" 
 If we want to do more advanced select statements, we are going to use the `findAdvanced` function. We use the first
 argument to find using basic equal conditions (like above), the second argument is to do a list of "advanced" topics.
+This is by far the best way to do complicated queries. 
+
+Below is an example of joining two tables, returning select columns, searching using like comparison, and paging using 
+limit and before. 
+
+```javascript
+Orders.findAdvanced({LOCATION_ID: id}, {
+    COLUMNS: ["Orders.*", "Users.USERNAME", "Users.EMAIL"],
+    BEFORE: {KEY: "ID", VALUE: before},
+    LEFT_JOIN: {TABLE: "Users", LEFT: "Orders.ACCOUNT_ID", RIGHT: "Users.ID"},
+    LIKE: [{KEY: "Orders.UNIQUE_ID", VALUE: search + "%"}, {KEY: "Users.USERNAME", VALUE: search + "%"}, {KEY: "Users.EMAIL", VALUE: search + "%"}],
+    LIMIT: 25,
+    DESC: "ID"
+}).then(() => {
+   // do stuff
+})
+```
 
 We can only use promises with advanced find. 
 
