@@ -133,7 +133,7 @@ limit and before.
 
 ```javascript
 Orders.findAdvanced({LOCATION_ID: id}, {
-    COLUMNS: ["Orders.*", "Users.USERNAME", "Users.EMAIL"],
+    COLUMNS: ["Orders.*", "Users.USERNAME", "Users.EMAIL AS USER_EMAIL"],
     BEFORE: {KEY: "ID", VALUE: before},
     LEFT_JOIN: {TABLE: "Users", LEFT: "Orders.ACCOUNT_ID", RIGHT: "Users.ID"},
     LIKE: [{KEY: "Orders.UNIQUE_ID", VALUE: search + "%"}, {KEY: "Users.USERNAME", VALUE: search + "%"}, {KEY: "Users.EMAIL", VALUE: search + "%"}],
@@ -182,7 +182,18 @@ testTable.findAdvanced({}, {
 });
 ```
 
-Currently you can only use one join at a time, but if it's requested we can add stacking. 
+If you want to add more joins of the same type just put them in an array. 
+```javascript
+testTable.findAdvanced({}, {
+    LEFT_JOIN: [
+        {TABLE: "Accounts", LEFT: "Patrons.ACCOUNT_ID", RIGHT: "Accounts.ID"},
+        {TABLE: "Orders", LEFT: "Patrons.ORDER_ID", RIGHT: "Orders.ID"}
+    ],
+}).then((lRows) => {
+   // Do stuff             
+});
+```
+
 
 ### Before/After
 If you want to get rows before or after an index, use the `BEFORE` and/or `AFTER` advanced parameter.

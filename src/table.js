@@ -170,10 +170,6 @@ Table.prototype.findAdvanced = function (properties, advanced={}) {
             return reject(new Error("Table '" + this.name + "' was never assigned a Database!"));
         }
 
-        if (QueryHelper.checkData(this.scheme.getKeys(), properties)) {
-            return reject(new Error("Certain keys are not found in Table '" + this.name + "' Scheme"));
-        }
-
         let name = this.name;
         let pool = this.database.pool;
         QueryHelper.toKeyValue(properties, function (err, key, values) {
@@ -190,13 +186,37 @@ Table.prototype.findAdvanced = function (properties, advanced={}) {
             let leftDict = advanced.LEFT_JOIN, rightDict = advanced.RIGHT_JOIN;
             let innerDict = advanced.INNER_JOIN, fullDict = advanced.FULL_JOIN;
             if (leftDict) {
-                join = ` LEFT JOIN ${leftDict.TABLE} ON ${leftDict.LEFT} = ${leftDict.RIGHT}`
+                if (!Array.isArray(leftDict)) {
+                    leftDict = [leftDict];
+                }
+
+                for (let left of leftDict) {
+                    join += ` LEFT JOIN ${left.TABLE} ON ${left.LEFT} = ${left.RIGHT}`
+                }
             } else if (rightDict) {
-                join = ` RIGHT JOIN ${leftDict.TABLE} ON ${leftDict.LEFT} = ${leftDict.RIGHT}`
+                if (!Array.isArray(rightDict)) {
+                    rightDict = [rightDict];
+                }
+
+                for (let right of rightDict) {
+                    join += ` RIGHT JOIN ${right.TABLE} ON ${right.LEFT} = ${right.RIGHT}`
+                }
             } else if (innerDict) {
-                join = ` INNER JOIN ${innerDict.TABLE} ON ${innerDict.LEFT} = ${innerDict.RIGHT}`
+                if (!Array.isArray(innerDict)) {
+                    innerDict = [innerDict];
+                }
+
+                for (let inner of innerDict) {
+                    join += ` INNER JOIN ${inner.TABLE} ON ${inner.LEFT} = ${inner.RIGHT}`
+                }
             } else if (fullDict) {
-                join = ` FULL JOIN ${fullDict.TABLE} ON ${fullDict.LEFT} = ${fullDict.RIGHT}`
+                if (!Array.isArray(fullDict)) {
+                    fullDict = [fullDict];
+                }
+
+                for (let full of fullDict) {
+                    join += ` RIGHT JOIN ${full.TABLE} ON ${full.LEFT} = ${full.RIGHT}`
+                }
             }
 
             let query = `SELECT ${columns} FROM ${name + join} WHERE `;
