@@ -194,6 +194,17 @@ testTable.findAdvanced({}, {
 });
 ```
 
+### Before/After
+If you want to check if a column is not something, use the not parameter.
+
+```javascript
+testTable.findAdvanced({}, {
+    NOT: {KEY: "ID", VALUE: 5}
+}).then((lRows) => {
+   // do stuff    
+});
+```
+
 
 ### Before/After
 If you want to get rows before or after an index, use the `BEFORE` and/or `AFTER` advanced parameter.
@@ -241,6 +252,8 @@ testTable.findAdvanced({}, {
 
 ### TODO
 Checkout [JSSQL's Trello](https://trello.com/b/DoyfBZUt/jssql) to find what features are coming soon!
+
+- Custom Comparison 
 
 ### Developers Note
 This is my first npm project, and I am having a grand time working on this. I am adding features as I need them regarding my personal projects. If you want a feature added, submit a ticket [Here](https://github.com/FrostbyteDevelopment/JSSQL/issues). If you want to help with my project, feel free to create a pull request.

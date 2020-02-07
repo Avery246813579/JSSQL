@@ -160,11 +160,11 @@ Table.prototype.find = function (properties, callback) {
  * Finds using advanced stuff
  *
  * @param properties                Properties we want to check
- * @param advanced                  Object with LIMIT, AFTER, BEFORE, LIKE, COLUMNS, LEFT_JOIN, RIGHT_JOIN
+ * @param advanced                  Object with LIMIT, AFTER, BEFORE, LIKE, COLUMNS, LEFT_JOIN, RIGHT_JOIN, etc
  *
  * @returns {Promise<List>}
  */
-Table.prototype.findAdvanced = function (properties, advanced={}) {
+Table.prototype.findAdvanced = function (properties, advanced = {}) {
     return new Promise((resolve, reject) => {
         if (this.database == null) {
             return reject(new Error("Table '" + this.name + "' was never assigned a Database!"));
@@ -228,14 +228,42 @@ Table.prototype.findAdvanced = function (properties, advanced={}) {
 
             let beforeDict = advanced.BEFORE;
             if (beforeDict) {
-                query += ` AND ${beforeDict.KEY} < ?`;
-                values.push(beforeDict.VALUE);
+                if (!Array.isArray(beforeDict)) {
+                    beforeDict = [beforeDict];
+                }
+
+                for (let clause of beforeDict) {
+                    query += ` AND ${clause.KEY} < ?`;
+                    values.push(clause.VALUE);
+                }
             }
 
             let afterDict = advanced.AFTER;
             if (afterDict) {
-                query += ` AND ${afterDict.KEY} > ?`;
-                values.push(afterDict.VALUE);
+                if (!Array.isArray(afterDict)) {
+                    afterDict = [afterDict];
+                }
+
+                for (let clause of afterDict) {
+                    query += ` AND ${clause.KEY} > ?`;
+                    values.push(clause.VALUE);
+                }
+            }
+
+            let notDict = advanced.NOT;
+            if (notDict) {
+                if (!Array.isArray(notDict)) {
+                    notDict = [notDict];
+                }
+
+                for (let clause of notDict) {
+                    if (clause.VALUE === null) {
+                        query += ` AND ${clause.KEY} IS NOT NULL`;
+                    } else {
+                        query += ` AND ${clause.KEY} != ?`;
+                        values.push(clause.VALUE);
+                    }
+                }
             }
 
             let like = advanced.LIKE;
@@ -267,7 +295,7 @@ Table.prototype.findAdvanced = function (properties, advanced={}) {
             }
 
             if (advanced.LIMIT) {
-                query += " LIMIT "+ advanced.LIMIT;
+                query += " LIMIT " + advanced.LIMIT;
             }
 
             pool.getConnection(function (err, conn) {
