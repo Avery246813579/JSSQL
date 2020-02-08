@@ -105,6 +105,25 @@ Table.prototype.find = function (properties, callback) {
             return;
         }
 
+        if (Array.isArray(properties) && properties.length > 1000) {
+            let finds = [];
+            for (let i = 0; i < properties.length; i += 1000) {
+                let section = properties.slice(i, i + 1000);
+
+                finds.push(this.find(section));
+            }
+
+            return Promise.all(finds).then((data) => {
+                resolve(data.reduce((list, item) => {
+                    list.push(...item);
+
+                    return list;
+                }, []));
+            }).catch((err) => {
+                reject(err)
+            });
+        }
+
         let name = this.name;
         let pool = this.database.pool;
         QueryHelper.toKeyValue(properties, function (err, key, values) {
@@ -160,12 +179,31 @@ Table.prototype.find = function (properties, callback) {
  * Finds using advanced stuff
  *
  * @param properties                Properties we want to check
- * @param advanced                  Object with LIMIT, AFTER, BEFORE, LIKE, COLUMNS, LEFT_JOIN, RIGHT_JOIN, etc
+ * @param advanced                  Object with LIMIT, AFTER, BEFORE, LIKE, COLUMNS, LEFT_JOIN, RIGHT_JOIN
  *
  * @returns {Promise<List>}
  */
 Table.prototype.findAdvanced = function (properties, advanced = {}) {
     return new Promise((resolve, reject) => {
+        if (Array.isArray(properties) && properties.length > 1000) {
+            let finds = [];
+            for (let i = 0; i < properties.length; i += 1000) {
+                let section = properties.slice(i, i + 1000);
+
+                finds.push(this.findAdvanced(section, advanced));
+            }
+
+            return Promise.all(finds).then((data) => {
+                resolve(data.reduce((list, item) => {
+                    list.push(...item);
+
+                    return list;
+                }, []));
+            }).catch((err) => {
+                reject(err)
+            });
+        }
+
         if (this.database == null) {
             return reject(new Error("Table '" + this.name + "' was never assigned a Database!"));
         }
@@ -228,26 +266,14 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
 
             let beforeDict = advanced.BEFORE;
             if (beforeDict) {
-                if (!Array.isArray(beforeDict)) {
-                    beforeDict = [beforeDict];
-                }
-
-                for (let clause of beforeDict) {
-                    query += ` AND ${clause.KEY} < ?`;
-                    values.push(clause.VALUE);
-                }
+                query += ` AND ${beforeDict.KEY} < ?`;
+                values.push(beforeDict.VALUE);
             }
 
             let afterDict = advanced.AFTER;
             if (afterDict) {
-                if (!Array.isArray(afterDict)) {
-                    afterDict = [afterDict];
-                }
-
-                for (let clause of afterDict) {
-                    query += ` AND ${clause.KEY} > ?`;
-                    values.push(clause.VALUE);
-                }
+                query += ` AND ${afterDict.KEY} > ?`;
+                values.push(afterDict.VALUE);
             }
 
             let notDict = advanced.NOT;
@@ -598,7 +624,7 @@ Table.prototype.save = function (properties, callback) {
 Table.prototype.update = function (update, where, callback) {
     var instance = this;
 
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         if (this.database == null) {
             let err = Error("Table '" + this.name + "' was never assigned a Database!");
             if (callback) {
