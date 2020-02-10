@@ -76,6 +76,31 @@ Table.prototype.findOne = function (properties, callback) {
 };
 
 /**
+ * Do an advanced find and get only one row
+ *
+ * @param properties                Basic properties
+ * @param advanced                  Advanced properties
+ * @return {Promise<unknown>}
+ */
+Table.prototype.findOneAdvanced = function (properties, advanced) {
+    return new Promise((resolve, reject) => {
+        this.findAdvanced(properties, advanced).then((rows) => {
+            if (rows === null) {
+                return reject("INTERNAL_ERROR");
+            }
+
+            if (Object.keys(rows).length > 0) {
+                resolve(rows[0]);
+            } else {
+                resolve(null);
+            }
+        }).catch((err) => {
+            reject(err)
+        });
+    });
+};
+
+/**
  * Finds a list of rows based on the search properties
  *
  * @param properties                Properties we want to check
