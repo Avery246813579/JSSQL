@@ -1,8 +1,8 @@
 {
   "name": "jssql",
   "description": "A simple javascript MySQL library",
-  "version": "1.2.6",
-  "author": "Avery Durrant <avery@frostbyte.co>",
+  "version": "1.2.7",
+  "author": "Avery Durrant <avery@drip.is>",
   "license": "MIT",
   "dependencies": {
     "mysql": "~2.16.0"
@@ -24,7 +24,7 @@
   ],
   "bugs": {
     "url": "https://github.com/avery246813579/JSSQL/issues",
-    "email": "avery@frostbyte.co"
+    "email": "avery@drip.is"
   },
   "repository": {
     "type": "git",
