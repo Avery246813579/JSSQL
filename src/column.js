@@ -78,7 +78,7 @@ Column.prototype.toString = function () {
     }
 
     if (typeof this.default !== "undefined") {
-        toReturn += " DEFAULT " + this.default;
+        toReturn += " DEFAULT " + (isNaN(this.default) ? `'${this.default}'` : this.default);
     }
 
     if (typeof this.null !== 'undefined') {
