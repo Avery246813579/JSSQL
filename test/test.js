@@ -48,8 +48,10 @@ testDatabase.table([patrons, accounts]);
 // });
 
 patrons.findAdvanced({}, {
-    LIKE: [{KEY: "ID", VALUE: "a%"}, {KEY: "ID", VALUE: "b%", CONJUNCTION: "AND"}],
-    DEBUG: true
+    LIKE: {KEY: "SAD", VALUE: "asfd"},
+    DEBUG: true,
+    GROUP_BY: [],
+    RIGHT_JOIN: {},
 }).then((lRows) => {
     console.dir(lRows);
 });

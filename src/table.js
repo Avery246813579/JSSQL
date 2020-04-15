@@ -203,8 +203,48 @@ Table.prototype.find = function (properties, callback) {
 /**
  * Finds using advanced stuff
  *
- * @param properties                Properties we want to check
- * @param advanced                  Object with LIMIT, AFTER, BEFORE, LIKE, COLUMNS, LEFT_JOIN, RIGHT_JOIN
+ * @param properties                                Properties we want to check
+ * @param advanced {Object}                         Object to input advanced query parameters
+ *
+ * @param advanced.COLUMNS {String[]}               Returns certain columns back
+ * @param advanced.GROUP_BY {String|Array}          Group columns together
+ * @param advanced.ORDER_BY {String|Array}          Orders columns returned together
+ * @param advanced.LIMIT {Number}                   Limit number of rows returned
+ * @param advanced.DESC  {String}                   Descend results by this column
+ * @param advanced.ASC  {String}                    Ascend results by this column
+ *
+ * @param advanced.NOT {String|Array}               Not equals or not null comparisons
+ * @param advanced.AFTER {Object}                   Greater then comparison. Selects values after a key, value pair
+ * @param advanced.AFTER.KEY {String}               Column in comparison
+ * @param advanced.AFTER.VALUE {string|number}      Value in comparison
+ * @param advanced.BEFORE {Object}                  Less then comparison. Selects values after a key, value pair
+ * @param advanced.BEFORE.KEY {String}              Column in comparison
+ * @param advanced.BEFORE.VALUE {string|number}     Value in comparison
+ *
+ * @param advanced.LIKE {Object|Array}              Search for rows like the following
+ * @param advanced.LIKE.KEY {String}                Column in comparison
+ * @param advanced.LIKE.VALUE {String}              Value in comparison
+ * @param advanced.LIKE.CONJUNCTION {[String]}      Used for custom conjunctions
+ *
+ * @param advanced.RIGHT_JOIN {Object|Array}        SQL right join. Can be array for multi join or object for single join.
+ * @param advanced.RIGHT_JOIN.TABLE {String}        Table we want to perform join on
+ * @param advanced.RIGHT_JOIN.LEFT {String}         Left value of comparison
+ * @param advanced.RIGHT_JOIN.RIGHT {String}        Right value of comparison
+ *
+ * @param advanced.INNER_JOIN {Object|Array}        SQL inner join. Can be array for multi join or object for single join.
+ * @param advanced.INNER_JOIN.TABLE {String}        Table we want to perform join on
+ * @param advanced.INNER_JOIN.LEFT {String}         Left value of comparison
+ * @param advanced.INNER_JOIN.RIGHT {String}        Right value of comparison
+ *
+ * @param advanced.LEFT_JOIN {Object|Array}         SQL left join. Can be array for multi join or object for single join.
+ * @param advanced.LEFT_JOIN.TABLE {String}         Table we want to perform join on
+ * @param advanced.LEFT_JOIN.LEFT {String}          Left value of comparison
+ * @param advanced.LEFT_JOIN.RIGHT {String}         Right value of comparison
+ *
+ * @param advanced.FULL_JOIN {Object|Array}         SQL full join. Can be array for multi join or object for single join.
+ * @param advanced.FULL_JOIN.TABLE {String}         Table we want to perform join on
+ * @param advanced.FULL_JOIN.LEFT {String}          Left value of comparison
+ * @param advanced.FULL_JOIN.RIGHT {String}         Right value of comparison
  *
  * @returns {Promise<List>}
  */
@@ -278,7 +318,7 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
                 }
 
                 for (let full of fullDict) {
-                    join += ` RIGHT JOIN ${full.TABLE} ON ${full.LEFT} = ${full.RIGHT}`
+                    join += ` FULL JOIN ${full.TABLE} ON ${full.LEFT} = ${full.RIGHT}`
                 }
             }
 
@@ -337,12 +377,26 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
                 query += ` AND (${likeClause})`
             }
 
-            if (advanced.DESC) {
+            let orderBy = advanced.ORDER_BY;
+            if (orderBy) {
+                if (Array.isArray(advanced.ORDER_BY)) {
+                    orderBy = orderBy.join(", ");
+                }
+
+                query += " ORDER BY " + orderBy;
+            } else if (advanced.DESC) {
                 query += ` ORDER BY ${advanced.DESC} DESC`
+            } else if (advanced.ASC) {
+                query += ` ORDER BY ${advanced.ASC} DESC`
             }
 
-            if (advanced.ASC) {
-                query += ` ORDER BY ${advanced.ASC} DESC`
+            let groupBy = advanced.GROUP_BY;
+            if (groupBy) {
+                if (Array.isArray(groupBy)) {
+                    groupBy = groupBy.join(", ");
+                }
+
+                query += " GROUP BY " + groupBy
             }
 
             if (advanced.LIMIT) {

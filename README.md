@@ -194,7 +194,7 @@ testTable.findAdvanced({}, {
 });
 ```
 
-### Before/After
+### Not Equal / NOT NULL Comparison
 If you want to check if a column is not something, use the not parameter.
 
 ```javascript
@@ -229,11 +229,27 @@ testTable.findAdvanced({ACCOUNT_ID: 3}, {
 ```
 
 ## Asc/Desc
-You can order the rows using the `ASC` and `DESC` advanced parameter.
+You can order the rows using the `ASC` and `DESC` advanced parameter. 
 
 ```javascript
 testTable.findAdvanced({}, {
     ASC: "ACCOUNT_ID"
+}).then((lRows) => {
+    // do stuff
+});
+```
+
+## Group by / Order by
+If you want to group or order results by a certain column(s) or function, use the `ORDER_BY` or `GROUP_BY` advanced
+parameters. They can be either a string or array of strings.  
+
+```javascript
+testTable.findAdvanced({}, {
+    COLUMNS: ["Orders.*", "COUNT(Items.ORDER_ID) as NUMBER_ITEMS"],
+    LEFT_JOIN: [
+        {TABLE: "Items", LEFT: "Orders.ID", RIGHT: "Items.ORDER_ID"}
+    ],       
+    GROUP_BY: "Orders.ID"
 }).then((lRows) => {
     // do stuff
 });
