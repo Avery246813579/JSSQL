@@ -212,6 +212,7 @@ Table.prototype.find = function (properties, callback) {
  * @param advanced.LIMIT {Number}                   Limit number of rows returned
  * @param advanced.DESC  {String}                   Descend results by this column
  * @param advanced.ASC  {String}                    Ascend results by this column
+ * @param advanced.NEST_TABLES  {String}            Change how you want nested tables to respond
  *
  * @param advanced.NOT {String|Array}               Not equals or not null comparisons
  * @param advanced.AFTER {Object}                   Greater then comparison. Selects values after a key, value pair
@@ -287,6 +288,11 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
             let columns = "*";
             if (advanced.COLUMNS) {
                 columns = advanced.COLUMNS.join(", ");
+            }
+
+            let extraQueryParams = {};
+            if (advanced.NEST_TABLES) {
+                extraQueryParams.nestTables = advanced.NEST_TABLES;
             }
 
             let join = "";
@@ -448,7 +454,7 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
                     console.log(query, values);
                 }
 
-                conn.query(query, values, function (err, rows) {
+                conn.query({sql: query, ...extraQueryParams}, values, function (err, rows) {
                     conn.release();
 
                     if (err) {
