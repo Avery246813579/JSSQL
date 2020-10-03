@@ -259,6 +259,35 @@ testTable.findAdvanced({}, {
 });
 ```
 
+## Nested Tables
+By default, joined tables that have overlapping columns will override existing columns. We will use the `NEST_TABLES`
+function to do this.  
+
+If you want to get returned the different tables use the `NEST_TABLES` parameter set to true. 
+```javascript
+testTable.findAdvanced({}, {
+    NEST_TABLES: true,
+    COLUMNS: ["Orders.*", "COUNT(Items.ORDER_ID) as NUMBER_ITEMS"],
+    LEFT_JOIN: [
+        {TABLE: "Items", LEFT: "Orders.ID", RIGHT: "Items.ORDER_ID"}
+    ]       
+}).then((lRows) => {
+    // {Orders: {}, Items: {}}
+});
+```
+
+We can also set the `NEST_TABLES` function to a delimiter  
+```javascript
+testTable.findAdvanced({}, {
+    NEST_TABLES: "_",
+    COLUMNS: ["Orders.*", "COUNT(Items.ORDER_ID) as NUMBER_ITEMS"],
+    LEFT_JOIN: [
+        {TABLE: "Items", LEFT: "Orders.ID", RIGHT: "Items.ORDER_ID"}
+    ]       
+}).then((lRows) => {
+    // {Orders_ID: 1, Items_ID: 1}
+});
+```
 
 ## Group by / Order by
 If you want to group or order results by a certain column(s) or function, use the `ORDER_BY` or `GROUP_BY` advanced
