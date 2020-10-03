@@ -239,6 +239,27 @@ testTable.findAdvanced({}, {
 });
 ```
 
+## Advanced Where
+To do a raw conditional check you can use the `WHERE` advanced parameter and pass it an object or list of objects. 
+An example is below on how to use it.
+
+```javascript
+testTable.findAdvanced({}, {
+    WHERE: [
+        {KEY: "Orders.ID, OPERATION: ">"", VALUE: 20, CONJUNCTION: "OR"},
+        {KEY: "Orders.ID", OPERATION: "<", VALUE: 40},
+    ],
+    COLUMNS: ["Orders.*", "COUNT(Items.ORDER_ID) as NUMBER_ITEMS"],
+    LEFT_JOIN: [
+        {TABLE: "Items", LEFT: "Orders.ID", RIGHT: "Items.ORDER_ID"}
+    ],       
+    GROUP_BY: "Orders.ID"
+}).then((lRows) => {
+    // do stuff
+});
+```
+
+
 ## Group by / Order by
 If you want to group or order results by a certain column(s) or function, use the `ORDER_BY` or `GROUP_BY` advanced
 parameters. They can be either a string or array of strings.  

@@ -363,10 +363,10 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
                         }).join("") + ")", values, conjunction: lastConjunction};
                 }
 
-                let {key, value, operation="=", conjunction="AND"} = obj;
-                values.push(value);
+                let {KEY, VALUE, OPERATION="=", CONJUNCTION="AND"} = obj;
+                values.push(VALUE);
 
-                return {query: key + " " + operation + " ?", values, conjunction};
+                return {query: KEY + " " + OPERATION + " ?", values, conjunction: CONJUNCTION};
             }
 
             let advancedWhere = advanced.WHERE;
