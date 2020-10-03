@@ -7,7 +7,7 @@ $ npm install jssql
 This is a node.js driver that makes SQL easy! It doesnt matter if you're a SQL noob or expert, everyone can enjoy JSSQL.
 
 ### Setting up our database
-The first thing we need to do is setup a database. The code below initializes a database instance and if the database does not exist, then it will create one. 
+The first thing we need to do is set up a database. The code below initializes a database instance and if the database does not exist, then it will create one. 
 
 ```js
 var jssql = require('jssql');
@@ -239,6 +239,27 @@ testTable.findAdvanced({}, {
 });
 ```
 
+## Advanced Where
+To do a raw conditional check you can use the `WHERE` advanced parameter and pass it an object or list of objects. 
+An example is below on how to use it.
+
+```javascript
+testTable.findAdvanced({}, {
+    WHERE: [
+        {KEY: "Orders.ID, OPERATION: ">"", VALUE: 20, CONJUNCTION: "OR"},
+        {KEY: "Orders.ID", OPERATION: "<", VALUE: 40},
+    ],
+    COLUMNS: ["Orders.*", "COUNT(Items.ORDER_ID) as NUMBER_ITEMS"],
+    LEFT_JOIN: [
+        {TABLE: "Items", LEFT: "Orders.ID", RIGHT: "Items.ORDER_ID"}
+    ],       
+    GROUP_BY: "Orders.ID"
+}).then((lRows) => {
+    // do stuff
+});
+```
+
+
 ## Group by / Order by
 If you want to group or order results by a certain column(s) or function, use the `ORDER_BY` or `GROUP_BY` advanced
 parameters. They can be either a string or array of strings.  
@@ -265,11 +286,3 @@ testTable.findAdvanced({}, {
     // do stuff
 });
 ```
-
-### TODO
-Checkout [JSSQL's Trello](https://trello.com/b/DoyfBZUt/jssql) to find what features are coming soon!
-
-- Custom Comparison 
-
-### Developers Note
-This is my first npm project, and I am having a grand time working on this. I am adding features as I need them regarding my personal projects. If you want a feature added, submit a ticket [Here](https://github.com/FrostbyteDevelopment/JSSQL/issues). If you want to help with my project, feel free to create a pull request.

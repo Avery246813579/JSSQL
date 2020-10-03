@@ -226,22 +226,26 @@ Table.prototype.find = function (properties, callback) {
  * @param advanced.LIKE.VALUE {String}              Value in comparison
  * @param advanced.LIKE.CONJUNCTION {[String]}      Used for custom conjunctions
  *
- * @param advanced.RIGHT_JOIN {Object|Array}        SQL right join. Can be array for multi join or object for single join.
+ * @param advanced.RIGHT_JOIN {Object|Array}        SQL right join. Can be array for multi join or object for single
+ *     join.
  * @param advanced.RIGHT_JOIN.TABLE {String}        Table we want to perform join on
  * @param advanced.RIGHT_JOIN.LEFT {String}         Left value of comparison
  * @param advanced.RIGHT_JOIN.RIGHT {String}        Right value of comparison
  *
- * @param advanced.INNER_JOIN {Object|Array}        SQL inner join. Can be array for multi join or object for single join.
+ * @param advanced.INNER_JOIN {Object|Array}        SQL inner join. Can be array for multi join or object for single
+ *     join.
  * @param advanced.INNER_JOIN.TABLE {String}        Table we want to perform join on
  * @param advanced.INNER_JOIN.LEFT {String}         Left value of comparison
  * @param advanced.INNER_JOIN.RIGHT {String}        Right value of comparison
  *
- * @param advanced.LEFT_JOIN {Object|Array}         SQL left join. Can be array for multi join or object for single join.
+ * @param advanced.LEFT_JOIN {Object|Array}         SQL left join. Can be array for multi join or object for single
+ *     join.
  * @param advanced.LEFT_JOIN.TABLE {String}         Table we want to perform join on
  * @param advanced.LEFT_JOIN.LEFT {String}          Left value of comparison
  * @param advanced.LEFT_JOIN.RIGHT {String}         Right value of comparison
  *
- * @param advanced.FULL_JOIN {Object|Array}         SQL full join. Can be array for multi join or object for single join.
+ * @param advanced.FULL_JOIN {Object|Array}         SQL full join. Can be array for multi join or object for single
+ *     join.
  * @param advanced.FULL_JOIN.TABLE {String}         Table we want to perform join on
  * @param advanced.FULL_JOIN.LEFT {String}          Left value of comparison
  * @param advanced.FULL_JOIN.RIGHT {String}         Right value of comparison
@@ -296,7 +300,9 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
                 for (let left of leftDict) {
                     join += ` LEFT JOIN ${left.TABLE} ON ${left.LEFT} = ${left.RIGHT}`
                 }
-            } else if (rightDict) {
+            }
+
+            if (rightDict) {
                 if (!Array.isArray(rightDict)) {
                     rightDict = [rightDict];
                 }
@@ -304,7 +310,9 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
                 for (let right of rightDict) {
                     join += ` RIGHT JOIN ${right.TABLE} ON ${right.LEFT} = ${right.RIGHT}`
                 }
-            } else if (innerDict) {
+            }
+
+            if (innerDict) {
                 if (!Array.isArray(innerDict)) {
                     innerDict = [innerDict];
                 }
@@ -312,7 +320,9 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
                 for (let inner of innerDict) {
                     join += ` INNER JOIN ${inner.TABLE} ON ${inner.LEFT} = ${inner.RIGHT}`
                 }
-            } else if (fullDict) {
+            }
+
+            if (fullDict) {
                 if (!Array.isArray(fullDict)) {
                     fullDict = [fullDict];
                 }
@@ -339,6 +349,32 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
             if (afterDict) {
                 query += ` AND ${afterDict.KEY} > ?`;
                 values.push(afterDict.VALUE);
+            }
+
+            const getConditions = (obj, values=[]) => {
+                if (Array.isArray(obj)) {
+                    let lastConjunction = null;
+
+                    return {query: "(" + obj.map((item, i) => {
+                            let {query, values: newVals, conjunction="AND"} = getConditions(item, values);
+
+                            lastConjunction = conjunction;
+                            return query + (i + 1 < obj.length ? " " + conjunction + " " : "");
+                        }).join("") + ")", values, conjunction: lastConjunction};
+                }
+
+                let {KEY, VALUE, OPERATION="=", CONJUNCTION="AND"} = obj;
+                values.push(VALUE);
+
+                return {query: KEY + " " + OPERATION + " ?", values, conjunction: CONJUNCTION};
+            }
+
+            let advancedWhere = advanced.WHERE;
+            if (advancedWhere) {
+                let {query: conditionQuery, values: conditionValues} = getConditions(advancedWhere);
+
+                values.push(...conditionValues);
+                query += " AND " + conditionQuery;
             }
 
             let notDict = advanced.NOT;
