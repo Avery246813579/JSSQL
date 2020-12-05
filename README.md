@@ -68,6 +68,21 @@ testTable.save({
 });
 ```
 
+If we wanted to insert multiple rows at once, we would use an array instead of an object. 
+```js
+testTable.save([{
+    NAME: "BOB"
+}, {
+    NAME: "John"
+}], function(err){
+    if(err)
+        throw err;
+});
+```
+
+Note: The keys have to all be the same inside the insert array. 
+
+
 Recieving a row is just as easy! Just use the find function and we can get all the rows with the information we want!
 ```js
 testTable.find({

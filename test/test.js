@@ -18,6 +18,10 @@ var testScheme = new Scheme({
         INDEX: "PRIMARY KEY",
         NULL: false
     },
+    NAME: {
+        TYPE: "VARCHAR",
+        LENGTH: 20
+    }
 });
 
 var accountScheme = new Scheme({
@@ -27,10 +31,14 @@ var accountScheme = new Scheme({
         INDEX: "PRIMARY KEY",
         NULL: false
     },
+    NAME: {
+        TYPE: "VARCHAR",
+        LENGTH: 20
+    }
 });
 
 var Table = jssql.Table;
-var patrons = new Table('Patrons', testScheme);
+var patrons = new Table('AAAA', testScheme);
 var accounts = new Table("Accounts", accountScheme);
 
 testDatabase.table([patrons, accounts]);
@@ -47,11 +55,22 @@ testDatabase.table([patrons, accounts]);
 //     throw err;
 // });
 
-patrons.findAdvanced({}, {
-    LIKE: {KEY: "SAD", VALUE: "asfd"},
-    DEBUG: true,
-    GROUP_BY: [],
-    RIGHT_JOIN: {},
-}).then((lRows) => {
-    console.dir(lRows);
-});
+// patrons.findAdvanced({}, {
+//     LIKE: {KEY: "SAD", VALUE: "asfd"},
+//     DEBUG: true,
+//     GROUP_BY: [],
+//     RIGHT_JOIN: {},
+// }).then((lRows) => {
+//     console.dir(lRows);
+// });
+// patrons.insert({ID: 20});
+// let list = [];
+// for (let i = 10000; i < 100000; i++) {
+//     list.push({ID: i, NAME: "1"});
+// }
+
+patrons.insert([{
+    ID: 1100, NAME: undefined
+}, {
+    NAME: "Pie", ID: 1112
+}]);

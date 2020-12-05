@@ -18,13 +18,30 @@ QueryHelper.toValues = function (properties, callback) {
     var values = "";
     var valuesArray = [];
 
-    for (var key in properties) {
-        if (properties.hasOwnProperty(key)) {
-            keys += ", " + key;
-            values += ", ?";
+    if (Array.isArray(properties)) {
+        // TODO Check all the keys are the same
 
-            valuesArray.push(properties[key]);
+        let bulkValues = [], bulkKeys = null, bulkPlaceholders = null;
+        for (let item of properties) {
+            QueryHelper.toValues(item, (_keys, _placeholders, values) => {
+                bulkKeys = _keys;
+                bulkPlaceholders = _placeholders;
+
+                bulkValues.push(values);
+            });
         }
+
+        return callback(bulkKeys, bulkPlaceholders, bulkValues);
+    }
+
+    let propertyKeys = Object.keys(properties);
+    propertyKeys.sort();
+
+    for (let key of propertyKeys) {
+        keys += ", " + key;
+        values += ", ?";
+
+        valuesArray.push(properties[key]);
     }
 
     callback(keys.substr(2), values.substr(2), valuesArray);

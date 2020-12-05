@@ -711,7 +711,14 @@ Table.prototype.save = function (properties, callback) {
                     return;
                 }
 
-                conn.query("INSERT INTO " + name + " (" + key + ") VALUES (" + values + ")", valuesArray, function (err, result) {
+                let query = "INSERT INTO " + name + " (" + key + ")";
+                if (Array.isArray(properties)) {
+                    query += " VALUES " + properties.map(() => "(?)").join(", ");
+                } else {
+                    query += " VALUES (" + values + ")";
+                }
+
+                conn.query(query, valuesArray, function (err, result) {
                     conn.release();
 
                     if (err) {
