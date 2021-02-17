@@ -2,39 +2,40 @@ var jssql = require('./../src/index.js');
 
 var Database = jssql.Database;
 var testDatabase = new Database({
-    host: '127.0.0.1',
-    user: 'root',
-    password: '',
-    database: 'drip'
+  host: '127.0.0.1',
+  user: 'root',
+  password: '',
+  database: 'drip',
+  reconnectAttempts: 10
 });
 
 var Scheme = jssql.Scheme;
 var Structure = jssql.Structure;
 
 var testScheme = new Scheme({
-    ID: {
-        TYPE: "INT",
-        AI: true,
-        INDEX: "PRIMARY KEY",
-        NULL: false
-    },
-    NAME: {
-        TYPE: "VARCHAR",
-        LENGTH: 20
-    }
+  ID: {
+    TYPE: "INT",
+    AI: true,
+    INDEX: "PRIMARY KEY",
+    NULL: false
+  },
+  NAME: {
+    TYPE: "VARCHAR",
+    LENGTH: 20
+  }
 });
 
 var accountScheme = new Scheme({
-    ID: {
-        TYPE: "INT",
-        AI: true,
-        INDEX: "PRIMARY KEY",
-        NULL: false
-    },
-    NAME: {
-        TYPE: "VARCHAR",
-        LENGTH: 20
-    }
+  ID: {
+    TYPE: "INT",
+    AI: true,
+    INDEX: "PRIMARY KEY",
+    NULL: false
+  },
+  NAME: {
+    TYPE: "VARCHAR",
+    LENGTH: 20
+  }
 });
 
 var Table = jssql.Table;
@@ -69,8 +70,8 @@ testDatabase.table([patrons, accounts]);
 //     list.push({ID: i, NAME: "1"});
 // }
 
-patrons.insert([{
-    ID: 1100, NAME: undefined
-}, {
-    NAME: "Pie", ID: 1112
-}]);
+// patrons.insert([{
+//   ID: 1100, NAME: undefined
+// }, {
+//   NAME: "Pie", ID: 1112
+// }]);

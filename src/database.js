@@ -1,8 +1,21 @@
 var mysql = require('mysql');
 
+/**
+ *
+ * @param properties
+ * @param properties.host
+ * @param properties.user
+ * @param properties.password
+ * @param properties.database
+ * @param properties.reconnectAttempts
+ *
+ * @constructor
+ */
 function Database(properties) {
     this.tables = [];
     this.properties = {};
+    this.connectionAttempts = 0;
+    this.maxReconnectAttempts = 3;
 
     if (typeof properties['host'] == 'undefined') {
         throw Error('Database host needs to be defined');
@@ -18,6 +31,10 @@ function Database(properties) {
 
     if (typeof properties['database'] == 'undefined') {
         throw Error('Database name needs to be defined');
+    }
+
+    if (properties.reconnectAttempts) {
+        this.maxReconnectAttempts = properties.reconnectAttempts;
     }
 
     if (typeof properties['port'] != 'undefined') {
@@ -70,7 +87,17 @@ Database.prototype.table = function (table) {
         var instance = this;
         conn.query(toCreate, function (err, result) {
             if (err) {
+              if (instance.connectionAttempts > instance.maxReconnectAttempts) {
                 throw err;
+              }
+
+              setTimeout(function() {
+                console.log("Connection failed, retrying");
+
+                instance.table(table);
+              }, 1000);
+
+              return instance.connectionAttempts += 1;
             }
 
             instance.done = true;
