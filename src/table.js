@@ -210,6 +210,7 @@ Table.prototype.find = function (properties, callback) {
  * @param advanced.GROUP_BY {String|Array}          Group columns together
  * @param advanced.ORDER_BY {String|Array}          Orders columns returned together
  * @param advanced.LIMIT {Number}                   Limit number of rows returned
+ * @param advanced.OFFSET {Number}                  Number of rows to offset into result set
  * @param advanced.DESC  {String}                   Descend results by this column
  * @param advanced.ASC  {String}                    Ascend results by this column
  * @param advanced.NEST_TABLES  {String}            Change how you want nested tables to respond
@@ -443,6 +444,10 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
 
             if (advanced.LIMIT) {
                 query += " LIMIT " + advanced.LIMIT;
+            }
+
+            if (advanced.OFFSET) {
+                query += " OFFSET " + advanced.OFFSET;
             }
 
             pool.getConnection(function (err, conn) {
