@@ -216,6 +216,7 @@ Table.prototype.find = function (properties, callback) {
  * @param advanced.NEST_TABLES  {String}            Change how you want nested tables to respond
  *
  * @param advanced.NOT {String|Array}               Not equals or not null comparisons
+ * @param advanced.EXISTS {String|Array}            Sub where conditions to verify existence of a complex condition
  * @param advanced.AFTER {Object}                   Greater then comparison. Selects values after a key, value pair
  * @param advanced.AFTER.KEY {String}               Column in comparison
  * @param advanced.AFTER.VALUE {string|number}      Value in comparison
@@ -397,6 +398,17 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
                         query += ` AND ${clause.KEY} != ?`;
                         values.push(clause.VALUE);
                     }
+                }
+            }
+
+            let existsDict = advanced.EXISTS;
+            if (existsDict) {
+                if (!Array.isArray(existsDict)) {
+                    existsDict = [existsDict]
+                }
+
+                for (let clause of existsDict) {
+                    query += ` AND EXISTS (${clause})`
                 }
             }
 
