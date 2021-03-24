@@ -217,12 +217,15 @@ Table.prototype.find = function (properties, callback) {
  *
  * @param advanced.NOT {String|Array}               Not equals or not null comparisons
  * @param advanced.EXISTS {String|Array}            Sub where conditions to verify existence of a complex condition
+ * @param advanced.NOT_EXISTS {String | Array}      Inverse of EXISTS
  * @param advanced.AFTER {Object}                   Greater then comparison. Selects values after a key, value pair
  * @param advanced.AFTER.KEY {String}               Column in comparison
  * @param advanced.AFTER.VALUE {string|number}      Value in comparison
  * @param advanced.BEFORE {Object}                  Less then comparison. Selects values after a key, value pair
  * @param advanced.BEFORE.KEY {String}              Column in comparison
  * @param advanced.BEFORE.VALUE {string|number}     Value in comparison
+ * 
+ * @param advanced.HAVING {string}                  HAVING clause (pretty much WHERE clause but can be used with aggregate functions)
  *
  * @param advanced.LIKE {Object|Array}              Search for rows like the following
  * @param advanced.LIKE.KEY {String}                Column in comparison
@@ -412,6 +415,17 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
                 }
             }
 
+            let notExistsDict = advanced.NOT_EXISTS;
+            if (notExistsDict) {
+                if (!Array.isArray(notExistsDict)) {
+                    notExistsDict = [notExistsDict]
+                }
+
+                for (let clause of notExistsDict) {
+                    query += ` AND NOT EXISTS (${clause})`
+                }
+            }
+
             let like = advanced.LIKE;
             if (advanced.LIKE) {
                 let likes = like;
@@ -452,6 +466,15 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
                 }
 
                 query += " GROUP BY " + groupBy
+            }
+
+            let having = advanced.HAVING;
+            if (having) {
+                if (!Array.isArray(having)) {
+                    having = [having]
+                }
+
+                query += " HAVING " + having.join(" AND ")
             }
 
             if (advanced.LIMIT) {
