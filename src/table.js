@@ -446,6 +446,15 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
                 query += ` AND (${likeClause})`
             }
 
+            let groupBy = advanced.GROUP_BY;
+            if (groupBy) {
+                if (Array.isArray(groupBy)) {
+                    groupBy = groupBy.join(", ");
+                }
+
+                query += " GROUP BY " + groupBy
+            }
+
             let orderBy = advanced.ORDER_BY;
             if (orderBy) {
                 if (Array.isArray(advanced.ORDER_BY)) {
@@ -457,15 +466,6 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
                 query += ` ORDER BY ${advanced.DESC} DESC`
             } else if (advanced.ASC) {
                 query += ` ORDER BY ${advanced.ASC} DESC`
-            }
-
-            let groupBy = advanced.GROUP_BY;
-            if (groupBy) {
-                if (Array.isArray(groupBy)) {
-                    groupBy = groupBy.join(", ");
-                }
-
-                query += " GROUP BY " + groupBy
             }
 
             let having = advanced.HAVING;
