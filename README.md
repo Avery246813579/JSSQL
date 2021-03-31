@@ -123,6 +123,18 @@ testTable.findOne([
 });
 ```
 
+### WHERE IN (...)
+A common use case of the WHERE clause in SQL is to find records that match one of a set of values. To do this, simply pass an array as the value for one of your where clauses. Below finds Products that have the ID of either 1 or 2 and a LOCATION_ID of 1.
+
+```js
+Products.find(
+    { 
+        ID: [1, 2], 
+        LOCATION_ID: 1 
+    }
+);
+```
+
 ## "Advanced Find" 
 If we want to do more advanced select statements, we are going to use the `findAdvanced` function. We use the first
 argument to find using basic equal conditions (like above), the second argument is to do a list of "advanced" topics.
