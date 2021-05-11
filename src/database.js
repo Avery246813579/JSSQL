@@ -50,14 +50,14 @@ Database.prototype.loadPool = function (tried) {
  *
  * @param table     An array of tables or a singular table
  */
-Database.prototype.table = function (table) {
+Database.prototype.table = function (table, readOnlyDatabase = null) {
     if (Object.prototype.toString.call(table) === '[object Array]') {
         var toCreate = 'CREATE DATABASE IF NOT EXISTS ' + this.properties['database'] + ";USE " + this.properties['database'] + ";";
 
         for (var i = 0; i < table.length; i++) {
             var cTable = table[i];
 
-            cTable.assignDatabase(this);
+            cTable.assignDatabase(this, readOnlyDatabase);
             toCreate += cTable.toCreate() + ";";
         }
 
@@ -80,7 +80,7 @@ Database.prototype.table = function (table) {
     } else {
         this.tables.push(table);
 
-        table.assignDatabase(this);
+        table.assignDatabase(this, readOnlyDatabase);
         table.init();
     }
 };

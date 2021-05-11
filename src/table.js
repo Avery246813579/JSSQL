@@ -5,8 +5,11 @@ function Table(name, scheme) {
     this.scheme = scheme;
 }
 
-Table.prototype.assignDatabase = function (database) {
+Table.prototype.assignDatabase = function (database, readOnlyDatabase = null) {
     this.database = database;
+    if(readOnlyDatabase){
+        this.databaseReadOnly = readOnlyDatabase
+    }
 };
 
 Table.prototype.init = function () {
@@ -205,6 +208,8 @@ Table.prototype.find = function (properties, callback) {
  *
  * @param properties                                Properties we want to check
  * @param advanced {Object}                         Object to input advanced query parameters
+ * 
+ * @param advanced.READ_ONLY {Boolean}              Execute find on Read Only Database
  *
  * @param advanced.COLUMNS {String[]}               Returns certain columns back
  * @param advanced.GROUP_BY {String|Array}          Group columns together
@@ -285,6 +290,11 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
 
         let name = this.name;
         let pool = this.database.pool;
+        
+        if(advanced.READ_ONLY && this.databaseReadOnly){
+            pool = this.databaseReadOnly.pool
+        }
+
         QueryHelper.toKeyValue(properties, function (err, key, values) {
             if (err) {
                 return reject(new Error("Internal error trying to parse key value pair"));
