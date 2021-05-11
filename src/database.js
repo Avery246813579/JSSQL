@@ -49,6 +49,7 @@ Database.prototype.loadPool = function (tried) {
  * Attaches either an array or tables, or a singular table to a Database
  *
  * @param table     An array of tables or a singular table
+ * @param readOnlyDatabase (optional) A separate Database object that will serve as a replica READ_ONLY database for advanced find calls
  */
 Database.prototype.table = function (table, readOnlyDatabase = null) {
     if (Object.prototype.toString.call(table) === '[object Array]') {
