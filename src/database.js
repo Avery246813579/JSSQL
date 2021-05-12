@@ -49,15 +49,16 @@ Database.prototype.loadPool = function (tried) {
  * Attaches either an array or tables, or a singular table to a Database
  *
  * @param table     An array of tables or a singular table
+ * @param readOnlyDatabase (optional) A separate Database object that will serve as a replica READ_ONLY database for advanced find calls
  */
-Database.prototype.table = function (table) {
+Database.prototype.table = function (table, readOnlyDatabase = null) {
     if (Object.prototype.toString.call(table) === '[object Array]') {
         var toCreate = 'CREATE DATABASE IF NOT EXISTS ' + this.properties['database'] + ";USE " + this.properties['database'] + ";";
 
         for (var i = 0; i < table.length; i++) {
             var cTable = table[i];
 
-            cTable.assignDatabase(this);
+            cTable.assignDatabase(this, readOnlyDatabase);
             toCreate += cTable.toCreate() + ";";
         }
 
@@ -80,7 +81,7 @@ Database.prototype.table = function (table) {
     } else {
         this.tables.push(table);
 
-        table.assignDatabase(this);
+        table.assignDatabase(this, readOnlyDatabase);
         table.init();
     }
 };
