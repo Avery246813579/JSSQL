@@ -106,7 +106,8 @@ QueryHelper.toKeyValue = function (properties, callback) {
                     if (properties[key] == null) {
                         keys += " AND " + key + " IS NULL";
                     } else if (Array.isArray(properties[key]) ) {
-                        keys += " AND " + key + " IN (" + properties[key].join() + ")";
+                        keys += " AND " + key + " IN (" + properties[key].map(x => "?").join() + ")";
+                        values.push(...properties[key]);
                     }else {
                         keys += " AND " + key + " = ?";
                         values.push(properties[key]);
