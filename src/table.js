@@ -208,7 +208,7 @@ Table.prototype.find = function (properties, callback) {
  *
  * @param properties                                Properties we want to check
  * @param advanced {Object}                         Object to input advanced query parameters
- * 
+ *
  * @param advanced.READ_ONLY {Boolean}              Execute find on Read Only Database
  *
  * @param advanced.COLUMNS {String[]}               Returns certain columns back
@@ -229,7 +229,7 @@ Table.prototype.find = function (properties, callback) {
  * @param advanced.BEFORE {Object}                  Less then comparison. Selects values after a key, value pair
  * @param advanced.BEFORE.KEY {String}              Column in comparison
  * @param advanced.BEFORE.VALUE {string|number}     Value in comparison
- * 
+ *
  * @param advanced.HAVING {string}                  HAVING clause (pretty much WHERE clause but can be used with aggregate functions)
  *
  * @param advanced.LIKE {Object|Array}              Search for rows like the following
@@ -290,7 +290,7 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
 
         let name = this.name;
         let pool = this.database.pool;
-        
+
         if(advanced.READ_ONLY && this.databaseReadOnly){
             pool = this.databaseReadOnly.pool
         }
@@ -407,6 +407,10 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
                 for (let clause of notDict) {
                     if (clause.VALUE === null) {
                         query += ` AND ${clause.KEY} IS NOT NULL`;
+                    } else if (clause.VALUE_COLUMN){
+                        query += ` AND ${clause.KEY} != ${clause.VALUE_COLUMN}`;
+                    } else if (Array.isArray(clause.VALUE)){
+                        query += ` AND ${clause.KEY} NOT IN (${clause.VALUE.join()})`;
                     } else {
                         query += ` AND ${clause.KEY} != ?`;
                         values.push(clause.VALUE);
