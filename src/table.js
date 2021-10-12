@@ -479,7 +479,7 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
             } else if (advanced.DESC) {
                 query += ` ORDER BY ${advanced.DESC} DESC`
             } else if (advanced.ASC) {
-                query += ` ORDER BY ${advanced.ASC} DESC`
+                query += ` ORDER BY ${advanced.ASC} ASC`
             }
 
             let having = advanced.HAVING;
