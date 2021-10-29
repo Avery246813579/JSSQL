@@ -6,7 +6,7 @@ $ npm install jssql
 
 This is a node.js driver that makes SQL easy! It doesnt matter if you're a SQL noob or expert, everyone can enjoy JSSQL.
 
-### Setting up our database
+## Setting up our database
 The first thing we need to do is set up a database. The code below initializes a database instance and if the database does not exist, then it will create one. 
 
 ```js
@@ -24,7 +24,7 @@ var testDatabase = new Database({
 We can also add in the `connectionLimit` message to add the number of 
 pool connections we want. Default is 10.
 
-### Creating our first scheme and table
+## Creating our first scheme and table
 Now that we have a database initilized we can go right into creating out first scheme and table. Let's start by creating our scheme. 
 ```js
 var Scheme = jssql.Scheme;
@@ -79,7 +79,7 @@ var readOnlyDatabase = new Database({
 testDatabase.table(testTable, readOnlyDatabase);
 ```
 
-### Placing and recieving information 
+## Placing and recieving information 
 Once we have our table sorted out, we can place some information in it. Below is a quick example of how to add a row.
 ```js
 testTable.save({
@@ -118,7 +118,7 @@ testTable.findOne({
 
 There is a small window of time that the save function takes to actually save the new row. Because of this time, having a save and find right after each other will not show the new row. This should not be a problem unless you perform the find directly after the save. If doing this is completely necessary, set a timeout before you call the find. 
 
-### Updating rows
+## Updating rows
 If you want to update a row, use the update function. The example below updates all the rows where NAME is equal to 'BOB' and sets NAME equal to 'NOT BOB'
 ```js
 testTable.update({NAME: "NOT BOB"}, {NAME: "BOB"}, function (err) {
@@ -128,7 +128,7 @@ testTable.update({NAME: "NOT BOB"}, {NAME: "BOB"}, function (err) {
 });
 ```
 
-### AND vs OR 
+## AND vs OR 
 In SQL we can use AND and OR to find and update statements. We use an array to handle ORs, and dictionaries to handle ANDs. My explaination might sound weird, so let me just show you how it works:
 
 The code below will find one row that has the dog variable set to 'ONE' OR it will find one row where dog is set to 'TWO'.
@@ -145,7 +145,7 @@ testTable.findOne([
 });
 ```
 
-### WHERE IN (...)
+## WHERE IN (...)
 A common use case of the WHERE clause in SQL is to find records that match one of a set of values. To do this, simply pass an array as the value for one of your where clauses. Below finds Products that have the ID of either 1 or 2 and a LOCATION_ID of 1.
 
 ```js
@@ -191,7 +191,7 @@ testTable.findAdvanced({}, {
 });
 ```
 
-### Like
+## Like
 You can use the like comparison using the following. The LIKE block will default to be using or's but you can change it
 to use ANDs using the CONJUNCTION key.
 
@@ -204,7 +204,7 @@ testTable.findAdvanced({}, {
 ```
 
 
-### Joins
+## Joins
 If you want to utilize the power join syntax in sql, we can use one of the following: LEFT_JOIN, RIGHT_JOIN, INNER_JOIN, 
 FULL_JOIN
 
@@ -228,7 +228,7 @@ testTable.findAdvanced({}, {
 });
 ```
 
-### Not Equal / NOT NULL Comparison
+## Not Equal / NOT NULL Comparison
 If you want to check if a column is not something, use the not parameter.
 
 ```javascript
@@ -240,7 +240,7 @@ testTable.findAdvanced({}, {
 ```
 
 
-### Before/After
+## Before/After
 If you want to get rows before or after an index, use the `BEFORE` and/or `AFTER` advanced parameter.
 
 ```javascript
@@ -251,7 +251,7 @@ testTable.findAdvanced({}, {
 });
 ```
 
-### Limits
+## Limits
 We can limit the amount of rows we get by just adding the `LIMIT` key to our query.
 
 ```javascript
@@ -339,13 +339,24 @@ testTable.findAdvanced({}, {
 });
 ```
 
-### Debug
-If you want to debug and see the full query, use the `DEBUG` advanced parameter.
+## Debug
+If you want to debug and see the full query, use the `DEBUG` advanced parameter. This will print the raw SQL query to your console.
 
 ```javascript
 testTable.findAdvanced({}, {
     DEBUG: true
 }).then((lRows) => {
     // do stuff
+});
+```
+
+## READ_ONLY
+If you have set up a read only replicate connection when adding tables to your database, by setting READ_ONLY: true, you will execute your advanced find query on the read only database.
+
+```javascript
+testTable.findAdvanced({}, {
+    READ_ONLY: true
+}).then((lRows) => {
+    // Query takes place on the read only database
 });
 ```
