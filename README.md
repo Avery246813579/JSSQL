@@ -280,7 +280,7 @@ An example is below on how to use it.
 ```javascript
 testTable.findAdvanced({}, {
     WHERE: [
-        {KEY: "Orders.ID, OPERATION: ">"", VALUE: 20, CONJUNCTION: "OR"},
+        {KEY: "Orders.ID", OPERATION: ">", VALUE: 20, CONJUNCTION: "OR"},
         {KEY: "Orders.ID", OPERATION: "<", VALUE: 40},
     ],
     COLUMNS: ["Orders.*", "COUNT(Items.ORDER_ID) as NUMBER_ITEMS"],
