@@ -57,6 +57,28 @@ var testTable = new Table('TABLE_NAME', testScheme);
 testDatabase.table(testTable);
 ```
 
+Additionally, if you have multiple tables that you want to access via the 'testDatabase', you may pass in an array of Table objects.
+```js
+var testTable = new Table('TABLE_NAME', testScheme);
+var testTable2 = new Table('TABLE_NAME_2', testScheme2);
+
+testDatabase.table([testTable, testTable2]);
+```
+
+Lastly, if you want to use a READ_ONLY replica of the database, you can create a second Database object and pass it in as the second parameter.  
+```js
+var testTable = new Table('TABLE_NAME', testScheme);
+
+var readOnlyDatabase = new Database({
+  host: '127.0.0.2',
+  user: 'root2',
+  password: '',
+  database: 'READ_ONLY_DATABASE'
+});
+
+testDatabase.table(testTable, readOnlyDatabase);
+```
+
 ### Placing and recieving information 
 Once we have our table sorted out, we can place some information in it. Below is a quick example of how to add a row.
 ```js
