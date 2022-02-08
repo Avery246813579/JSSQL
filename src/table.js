@@ -362,14 +362,28 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
 
             let beforeDict = advanced.BEFORE;
             if (beforeDict) {
-                query += ` AND ${beforeDict.KEY} < ?`;
-                values.push(beforeDict.VALUE);
+                if (Array.isArray(beforeDict)) {
+                    for(const b4 of beforeDict){
+                        query += ` AND ${b4.KEY} < ?`;
+                        values.push(b4.VALUE);
+                    }
+                } else{
+                    query += ` AND ${beforeDict.KEY} < ?`;
+                    values.push(beforeDict.VALUE);
+                }
             }
 
             let afterDict = advanced.AFTER;
             if (afterDict) {
-                query += ` AND ${afterDict.KEY} > ?`;
-                values.push(afterDict.VALUE);
+                if (Array.isArray(afterDict)) {
+                    for(const a4 of afterDict){
+                        query += ` AND ${a4.KEY} > ?`;
+                        values.push(a4.VALUE);
+                    }
+                } else{
+                    query += ` AND ${afterDict.KEY} > ?`;
+                    values.push(afterDict.VALUE);
+                }
             }
 
             const getConditions = (obj, values=[]) => {
