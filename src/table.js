@@ -319,7 +319,19 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
                 }
 
                 for (let left of leftDict) {
-                    join += ` LEFT JOIN ${left.TABLE} ON ${left.LEFT} = ${left.RIGHT}`
+                    if (left.WHERE) {
+                        join += ` LEFT JOIN ${left.TABLE} ON `
+
+                        if (!Array.isArray(left.WHERE)) {
+                            left.WHERE = [left.WHERE];
+                        }
+
+                        join += left.WHERE.map((left) => {
+                            return `${left.LEFT} = ${left.RIGHT}`
+                        }).join(left.OPERATOR || " AND ");
+                    } else {
+                        join += ` LEFT JOIN ${left.TABLE} ON ${left.LEFT} = ${left.RIGHT}`
+                    }
                 }
             }
 
@@ -329,7 +341,19 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
                 }
 
                 for (let right of rightDict) {
-                    join += ` RIGHT JOIN ${right.TABLE} ON ${right.LEFT} = ${right.RIGHT}`
+                    if (right.WHERE) {
+                        join += ` RIGHT JOIN ${right.TABLE} ON `
+
+                        if (!Array.isArray(right.WHERE)) {
+                            right.WHERE = [right.WHERE];
+                        }
+
+                        join += right.WHERE.map((left) => {
+                            return `${left.LEFT} = ${left.RIGHT}`
+                        }).join(right.OPERATOR || " AND ");
+                    } else {
+                        join += ` RIGHT JOIN ${right.TABLE} ON ${right.LEFT} = ${right.RIGHT}`
+                    }
                 }
             }
 
@@ -339,7 +363,19 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
                 }
 
                 for (let inner of innerDict) {
-                    join += ` INNER JOIN ${inner.TABLE} ON ${inner.LEFT} = ${inner.RIGHT}`
+                    if (inner.WHERE) {
+                        join += ` INNER JOIN ${inner.TABLE} ON `
+
+                        if (!Array.isArray(inner.WHERE)) {
+                            inner.WHERE = [inner.WHERE];
+                        }
+
+                        join += inner.WHERE.map((left) => {
+                            return `${left.LEFT} = ${left.RIGHT}`
+                        }).join(inner.OPERATOR || " AND ");
+                    } else {
+                        join += ` INNER JOIN ${inner.TABLE} ON ${inner.LEFT} = ${inner.RIGHT}`
+                    }
                 }
             }
 
@@ -349,7 +385,19 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
                 }
 
                 for (let full of fullDict) {
-                    join += ` FULL JOIN ${full.TABLE} ON ${full.LEFT} = ${full.RIGHT}`
+                    if (full.WHERE) {
+                        join += ` FULL JOIN ${full.TABLE} ON `
+
+                        if (!Array.isArray(full.WHERE)) {
+                            full.WHERE = [full.WHERE];
+                        }
+
+                        join += full.WHERE.map((left) => {
+                            return `${left.LEFT} = ${left.RIGHT}`
+                        }).join(full.OPERATOR || " AND ");
+                    } else {
+                        join += ` FULL JOIN ${full.TABLE} ON ${full.LEFT} = ${full.RIGHT}`
+                    }
                 }
             }
 

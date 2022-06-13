@@ -1,7 +1,7 @@
 {
   "name": "jssql",
   "description": "A simple javascript MySQL library",
-  "version": "1.5.7",
+  "version": "1.5.8",
   "author": "Avery Durrant <avery@frostbyte.co>",
   "license": "MIT",
   "dependencies": {
