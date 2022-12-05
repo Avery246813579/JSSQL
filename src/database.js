@@ -91,7 +91,7 @@ Database.prototype.connect = function (properties, callback) {
 };
 
 Database.prototype.disconnect = function (callback) {
-
+    this.pool.end();
 };
 
 Database.prototype.toString = function () {
