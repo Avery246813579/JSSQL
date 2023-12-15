@@ -327,6 +327,10 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
                         }
 
                         join += left.WHERE.map((left) => {
+                            if (left.RIGHT === null) {
+                                return `${left.LEFT} IS NULL`
+                            }
+
                             return `${left.LEFT} = ${left.RIGHT}`
                         }).join(left.OPERATOR || " AND ");
                     } else {
@@ -349,6 +353,10 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
                         }
 
                         join += right.WHERE.map((left) => {
+                            if (left.RIGHT === null) {
+                                return `${left.LEFT} IS NULL`
+                            }
+
                             return `${left.LEFT} = ${left.RIGHT}`
                         }).join(right.OPERATOR || " AND ");
                     } else {
@@ -371,6 +379,10 @@ Table.prototype.findAdvanced = function (properties, advanced = {}) {
                         }
 
                         join += inner.WHERE.map((left) => {
+                            if (left.RIGHT === null) {
+                                return `${left.LEFT} IS NULL`
+                            }
+
                             return `${left.LEFT} = ${left.RIGHT}`
                         }).join(inner.OPERATOR || " AND ");
                     } else {
