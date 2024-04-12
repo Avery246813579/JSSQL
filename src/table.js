@@ -737,6 +737,40 @@ Table.prototype.query = function (query, callback) {
 };
 
 /**
+ * Query that is prepared
+ *
+ * @param query
+ * @param callback
+ * @returns {Promise<unknown>}
+ */
+Table.prototype.preparedQuery = function (query, values) {
+    return new Promise((resolve, reject) => {
+        if (this.database == null) {
+            let err = Error("Table '" + this.name + "' was never assigned a Database!");
+
+            return reject(err);
+        }
+
+        let pool = this.database.pool;
+        pool.getConnection(function (err, conn) {
+            if (err) {
+                return reject(err);
+            }
+
+            conn.query(query, values, function (err, rows) {
+                conn.release();
+
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(rows);
+                }
+            });
+        });
+    });
+};
+
+/**
  * Returns the number of rows in a table
  *
  * @param callback  (error, num_of_rows (int))
