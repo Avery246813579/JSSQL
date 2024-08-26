@@ -1,7 +1,7 @@
 {
   "name": "jssql",
   "description": "A simple javascript MySQL library",
-  "version": "1.5.11",
+  "version": "1.5.12",
   "author": "Avery Durrant <avery@frostbyte.co>",
   "license": "MIT",
   "dependencies": {
@@ -29,5 +29,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/avery246813579/JSSQL.git"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }

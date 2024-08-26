@@ -683,6 +683,52 @@ Table.prototype.findLike = function (properties, callback, limit) {
     });
 };
 
+Table.prototype.readOnlyQuery = function(query, callback) {
+    return new Promise((resolve, reject) => {
+        if (this.databaseReadOnly == null) {
+            let err = Error("Table '" + this.name + "' was never assigned a read only Database!");
+            if (callback) {
+                callback(err);
+            }
+
+            reject(err);
+            return;
+        }
+
+        let name = this.name;
+        let pool = this.databaseReadOnly.pool;
+        pool.getConnection(function (err, conn) {
+            if (err) {
+                if (callback) {
+                    callback(err);
+                }
+
+                reject(err);
+                return;
+            }
+
+            conn.query(query, function (err, rows) {
+                conn.release();
+
+                if (err) {
+                    if (callback) {
+                        callback(err);
+                    }
+
+                    reject(err);
+                } else {
+                    if (callback) {
+                        callback(err, rows);
+                    }
+
+                    resolve(rows);
+                }
+            });
+        });
+    });
+
+}
+
 /**
  * Send a raw query and get a list of rows back
  *
